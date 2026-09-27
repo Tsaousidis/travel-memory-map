@@ -4,9 +4,15 @@ A personal, interactive map of your travels and memories.
 
 ## Status
 
-Step 1: project initialization. Next.js App Router, TypeScript, Tailwind CSS,
-and ESLint are configured. Travel features and Supabase integration will be
+Step 2: frontend structure and code conventions. Next.js App Router, TypeScript,
+Tailwind CSS, and ESLint are configured. Travel features and Supabase integration will be
 implemented in subsequent steps. Deployment is outside the current scope.
+
+## Architecture
+
+Source code is organized into `app`, `components`, `features`, `lib`, `types`,
+and `utils`. See [architecture and conventions](docs/architecture.md) for folder
+responsibilities, naming, imports, and server/browser boundaries.
 
 ## Local development
 
