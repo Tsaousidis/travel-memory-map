@@ -4,9 +4,11 @@ A personal, interactive map of your travels and memories.
 
 ## Status
 
-Step 4: global design system and component preview. Next.js App Router, TypeScript,
-Tailwind CSS, and ESLint are configured. Travel features and Supabase integration will be
-implemented in subsequent steps. Deployment is outside the current scope.
+Step 5: Supabase client integration (live connection requires project configuration).
+Next.js App Router, TypeScript,
+Tailwind CSS, and ESLint are configured. Supabase browser/server clients are added;
+database tables, authentication, and travel features follow in subsequent steps.
+Deployment is outside the current scope.
 
 ## Architecture
 
@@ -42,7 +44,8 @@ npm start
 ## Environment files
 
 Copy `.env.example` to `.env.local` if you do not already have a local file.
-Leave Supabase values empty until Step 5. The current homepage runs without them;
+Configure Supabase using the [setup guide](docs/supabase.md), then run
+`npm run check:supabase`. The current homepage runs without these values;
 the map configuration defaults to a public demo style.
 
 See [environment setup](docs/environment.md) for variables, validation, and

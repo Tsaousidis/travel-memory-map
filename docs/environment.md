@@ -19,9 +19,9 @@ output after changing them.
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Project publishable key (`sb_publishable_...`) | When using Supabase, starting in Step 5 |
 | `NEXT_PUBLIC_MAP_STYLE_URL` | Absolute HTTP(S) MapLibre style URL | Optional; defaults to the MapLibre demo style |
 
-Step 3 leaves Supabase values empty. The current homepage and build work without
-a Supabase project. Step 5 will add real values from the project's Connect dialog
-and verify the connection. This step does not create clients or contact Supabase.
+The template leaves Supabase values empty. The current homepage and build work
+without a Supabase project. Follow the [Supabase setup guide](supabase.md) to fill
+in values from the Connect dialog and run the Step 5 connectivity command.
 
 ## Using configuration
 
