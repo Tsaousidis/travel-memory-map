@@ -1,5 +1,5 @@
-import { ProjectIntro } from "@/features/home/components/project-intro";
+import { DesignSystemPreview } from "@/features/design-system/components/design-system-preview";
 
 export default function HomePage() {
-  return <ProjectIntro />;
+  return <DesignSystemPreview />;
 }

@@ -4,7 +4,7 @@ A personal, interactive map of your travels and memories.
 
 ## Status
 
-Step 3: environment configuration. Next.js App Router, TypeScript,
+Step 4: global design system and component preview. Next.js App Router, TypeScript,
 Tailwind CSS, and ESLint are configured. Travel features and Supabase integration will be
 implemented in subsequent steps. Deployment is outside the current scope.
 
@@ -24,6 +24,9 @@ npm run dev
 ```
 
 Open http://localhost:3000.
+
+The home route currently previews the shared UI components. See the
+[design system guide](docs/design-system.md) for tokens and component contracts.
 
 On Windows PowerShell, use `npm.cmd` if execution policy blocks `npm.ps1`.
 

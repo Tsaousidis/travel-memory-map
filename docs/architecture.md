@@ -5,12 +5,11 @@
 ```text
 src/
   app/                       Routes, layouts, metadata, global CSS
-    page.tsx                 Home route; composes the home feature
+    page.tsx                 Home route; currently previews the design system
     layout.tsx               Root document layout
   components/                Shared, domain-independent UI
   features/
-    home/components/
-      project-intro.tsx      Initial home content
+    design-system/components/ Component showcase and interactive examples
   lib/                       Shared integrations and configuration
   types/                     Types shared across features
   utils/                     Pure shared helpers
@@ -19,8 +18,8 @@ docs/                        Project documentation
 ```
 
 Folders reserved for later steps contain a README explaining their purpose.
-Only the home route is implemented. Authentication, application navigation,
-the design system, and travel features remain separate roadmap steps.
+Only the home route is implemented, with a design system preview. Authentication,
+application navigation, and travel features remain separate roadmap steps.
 
 ## Responsibilities and dependencies
 

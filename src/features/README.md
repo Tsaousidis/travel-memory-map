@@ -1,7 +1,7 @@
 # Features
 
-Group domain UI and behavior by feature. The `home/` feature contains the project
-introduction. Add `trips/`, `places/`, `photos/`, `map/`, `auth/`, `dashboard/`, and
+Group domain UI and behavior by feature. The `design-system/` feature contains
+the component preview. Add `trips/`, `places/`, `photos/`, `map/`, `auth/`, `dashboard/`, and
 `memories/` as their roadmap steps are implemented.
 
 Add components, hooks, types, validation, and server modules only as needed.

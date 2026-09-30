@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --background: #f7f7f2;
+  --foreground: #243d35;
+  --surface: #ffffff;
+  --muted: #59675e;
+  --border: #d8dfd5;
+  --accent: #245b45;
+  --accent-hover: #194532;
+  --soft: #eaf0e5;
+  --danger: #ac3434;
+  --radius: 1rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-surface: var(--surface);
+  --color-accent: var(--accent);
   --font-sans: Arial, Helvetica, sans-serif;
-  --font-mono: "Courier New", monospace;
+  --font-display: Georgia, "Times New Roman", serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@layer base {
+  body { background: var(--background); color: var(--foreground); font-family: var(--font-sans); line-height: 1.6; }
+  h1, h2, h3 { line-height: 1.15; text-wrap: balance; }
+  h1, h2 { font-family: var(--font-display); font-weight: 400; }
+  h1 { font-size: clamp(2.75rem, 6vw, 5rem); letter-spacing: -0.045em; }
+  h2 { font-size: clamp(1.75rem, 3vw, 2.25rem); letter-spacing: -0.025em; }
+  h3 { font-size: 1.05rem; font-weight: 600; }
+  button, input { font: inherit; }
+  button:not(:disabled) { cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+  ::selection { background: #cbe0c2; color: #243d35; }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .container { width: 100%; max-width: 76rem; margin-inline: auto; padding-inline: clamp(1.25rem, 4vw, 3rem); }
+  .eyebrow { font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .18em; color: var(--muted); }
+  .card { min-width: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: clamp(1.25rem, 3vw, 2rem); }
+  .button { display: inline-flex; justify-content: center; align-items: center; gap: .6rem; min-height: 2.75rem; padding: .65rem 1.15rem; border: 1px solid transparent; border-radius: .6rem; font-size: .875rem; font-weight: 600; line-height: 1.35; transition: background-color .15s, border-color .15s; }
+  .button--primary { background: var(--accent); color: white; }
+  .button--primary:hover:not(:disabled) { background: var(--accent-hover); }
+  .button--secondary { background: var(--surface); border-color: #89988c; color: var(--foreground); }
+  .button--secondary:hover:not(:disabled), .button--ghost:hover:not(:disabled) { background: var(--soft); }
+  .button--ghost { background: transparent; color: var(--foreground); }
+  .button--danger { background: var(--danger); color: white; }
+  .button--danger:hover:not(:disabled) { background: #892626; }
+  .button:disabled { opacity: .55; cursor: not-allowed; }
+  .field { display: grid; gap: .45rem; }
+  .field label { font-size: .85rem; font-weight: 600; }
+  .input { width: 100%; min-width: 0; min-height: 2.875rem; border: 1px solid #89988c; border-radius: .5rem; padding: .65rem .8rem; background: var(--surface); color: var(--foreground); }
+  .input::placeholder { color: var(--muted); }
+  .input[aria-invalid="true"] { border-color: var(--danger); }
+  .input:disabled { background: var(--soft); color: var(--muted); cursor: not-allowed; }
+  .field-hint, .field-error { font-size: .8rem; line-height: 1.5; }
+  .field-hint { color: var(--muted); }
+  .field-error { color: var(--danger); }
+  .loading-state { display: flex; align-items: center; gap: .75rem; font-size: .875rem; color: var(--muted); }
+  .spinner { display: inline-block; width: 1rem; height: 1rem; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; flex-shrink: 0; animation: spin 1s linear infinite; }
+  .skeleton { min-height: 1rem; border-radius: .4rem; background: var(--soft); animation: pulse 1.8s ease-in-out infinite; }
+  .empty-state { padding: 1.5rem 1rem; text-align: center; }
+  .empty-state p { max-width: 24rem; margin: .75rem auto 0; font-size: .9rem; color: var(--muted); }
+  .empty-symbol { display: inline-grid; place-items: center; width: 3.25rem; height: 3.25rem; border-radius: 50%; background: var(--soft); font-size: 2rem; margin-bottom: 1rem; }
+  .modal { position: fixed; inset: 0; margin: auto; width: min(32rem, calc(100% - 2rem)); max-height: calc(100dvh - 2rem); overflow-y: auto; padding: clamp(1.25rem, 4vw, 2rem); border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--foreground); box-shadow: 0 24px 80px #142d3433; }
+  .modal::backdrop { background: #172c28a6; }
+  .skip-link { position: fixed; top: .5rem; left: 1rem; z-index: 50; background: white; padding: .75rem; clip-path: inset(50%); }
+  .skip-link:focus { clip-path: none; }
+  .swatch { height: 4rem; border-radius: .6rem; border: 1px solid var(--border); }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 50% { opacity: .45; } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
