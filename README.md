@@ -4,10 +4,13 @@ A personal, interactive map of your travels and memories.
 
 ## Status
 
-Step 5: Supabase client integration (live connection requires project configuration).
+Step 6 complete: initial travel schema tested locally and applied to Supabase.
+Hosted verification was confirmed by the project owner on 2026-10-02.
+See the [database setup guide](docs/database.md).
 Next.js App Router, TypeScript,
 Tailwind CSS, and ESLint are configured. Supabase browser/server clients are added;
-database tables, authentication, and travel features follow in subsequent steps.
+schema migrations are in `supabase/migrations`. RLS policies, authentication,
+and travel features follow in subsequent steps.
 Deployment is outside the current scope.
 
 ## Architecture
@@ -37,6 +40,7 @@ On Windows PowerShell, use `npm.cmd` if execution policy blocks `npm.ps1`.
 ```sh
 npm run lint
 npm run typecheck
+npm run test:db
 npm run build
 npm start
 ```
