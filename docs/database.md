@@ -136,6 +136,9 @@ delete rows from `storage.objects` directly. No bucket exists from this migratio
 
 ## Access and tests
 
+The following describes the initial migration's access state. Step 7 adds the
+policies documented in [Row Level Security](row-level-security.md).
+
 RLS is enabled on all seven tables immediately, with no policies. Privileges are
 revoked from PUBLIC, anon, and authenticated. Therefore even countries cannot be
 read through the Data API yet. Step 7 adds minimal authenticated grants and owner

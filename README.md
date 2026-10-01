@@ -4,13 +4,15 @@ A personal, interactive map of your travels and memories.
 
 ## Status
 
-Step 6 complete: initial travel schema tested locally and applied to Supabase.
-Hosted verification was confirmed by the project owner on 2026-10-02.
-See the [database setup guide](docs/database.md).
+Step 7 complete: owner-based RLS policies tested locally and applied to Supabase.
+Hosted catalog verification was confirmed from the project owner's results on
+2026-10-02. See the [RLS setup guide](docs/row-level-security.md).
+The initial schema was applied and verified by the project owner on 2026-10-02;
+see the [database setup guide](docs/database.md).
 Next.js App Router, TypeScript,
 Tailwind CSS, and ESLint are configured. Supabase browser/server clients are added;
-schema migrations are in `supabase/migrations`. RLS policies, authentication,
-and travel features follow in subsequent steps.
+schema and policy migrations are in `supabase/migrations`. Authentication and
+travel features follow in subsequent steps.
 Deployment is outside the current scope.
 
 ## Architecture

@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
     "check:supabase": "node --env-file-if-exists=.env.local scripts/check-supabase.mjs",
-    "test:db": "node --test supabase/tests/schema.test.mjs"
+    "test:db": "node --test supabase/tests/*.test.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

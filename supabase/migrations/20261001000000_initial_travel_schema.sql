@@ -1,5 +1,3 @@
--- Step 6. PostgreSQL 15+. Apply once, as the database owner.
--- RLS is enabled immediately; application grants/policies arrive in Step 7.
 begin;
 
 create table public.countries (
