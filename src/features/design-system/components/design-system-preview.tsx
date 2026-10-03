@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Container } from "@/components/layout/container";
 import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
@@ -18,7 +19,7 @@ export function DesignSystemPreview() {
       <header className="border-b border-black/10 py-6">
         <Container className="flex flex-wrap items-center justify-between gap-3">
           <span className="font-display text-xl">◎ Travel Memory Map</span>
-          <span className="eyebrow">Design foundations · 01</span>
+          <Link href="/login" className="button button--secondary">Sign in</Link>
         </Container>
       </header>
       <main id="main" tabIndex={-1}>

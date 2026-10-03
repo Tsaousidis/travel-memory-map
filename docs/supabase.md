@@ -50,12 +50,11 @@ Both clients use `getSupabaseConfig()` and the public key. The server module is
 guarded with `server-only`. Database generics will be added with generated schema
 types after Step 6; do not invent table types now.
 
-**Authentication is not implemented yet.** Server Components cannot persist
-refreshed cookies. Before adding authenticated routes, Step 8 must implement the
-Next.js session refresh proxy, verified identity checks, login/logout, and
-redirects. The server cookie adapter follows the official SSR pattern, tolerating
-read-only cookie writes in Server Components. Do not treat client initialization
-or an unverified session as authorization.
+Authentication, protected routes, and the session refresh proxy are implemented
+in Step 8. Follow [authentication setup](authentication.md) for email redirects
+and live verification. Server Components cannot persist refreshed cookies; the
+proxy handles these before rendering. Server actions and callback handlers write
+their own outgoing cookies. Do not treat an unverified session as authorization.
 
 The UI preview does not call these clients; it still builds with empty Supabase
 values while the external project is being configured.

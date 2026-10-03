@@ -4,9 +4,10 @@ A personal, interactive map of your travels and memories.
 
 ## Status
 
-Step 7 complete: owner-based RLS policies tested locally and applied to Supabase.
-Hosted catalog verification was confirmed from the project owner's results on
-2026-10-02. See the [RLS setup guide](docs/row-level-security.md).
+Step 8: authentication implemented; hosted signup/email/session verification
+is pending. Follow the [authentication guide](docs/authentication.md).
+Owner-based RLS was applied and confirmed on 2026-10-02;
+see the [RLS setup guide](docs/row-level-security.md).
 The initial schema was applied and verified by the project owner on 2026-10-02;
 see the [database setup guide](docs/database.md).
 Next.js App Router, TypeScript,

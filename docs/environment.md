@@ -18,6 +18,7 @@ output after changing them.
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | When using Supabase, starting in Step 5 |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Project publishable key (`sb_publishable_...`) | When using Supabase, starting in Step 5 |
 | `NEXT_PUBLIC_MAP_STYLE_URL` | Absolute HTTP(S) MapLibre style URL | Optional; defaults to the MapLibre demo style |
+| `APP_URL` | Server-only app origin for signup callback URLs | Defaults to `http://localhost:3000`; must match Supabase URL Configuration |
 
 The template leaves Supabase values empty. The current homepage and build work
 without a Supabase project. Follow the [Supabase setup guide](supabase.md) to fill

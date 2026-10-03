@@ -5,7 +5,10 @@
 ```text
 src/
   app/                       Routes, layouts, metadata, global CSS
-    page.tsx                 Home route; currently previews the design system
+    page.tsx                 Public design system preview
+    (auth)/                  Login and signup routes
+    auth/                    PKCE callback and confirmation error
+    app/                     Protected application routes
     layout.tsx               Root document layout
   components/                Shared, domain-independent UI
   features/
@@ -18,8 +21,8 @@ docs/                        Project documentation
 ```
 
 Folders reserved for later steps contain a README explaining their purpose.
-Only the home route is implemented, with a design system preview. Authentication,
-application navigation, and travel features remain separate roadmap steps.
+Authentication routes and a minimal protected landing page are implemented.
+Application navigation and travel features remain separate roadmap steps.
 
 ## Responsibilities and dependencies
 
@@ -67,9 +70,9 @@ through public environment variables.
 
 ## Working on a step
 
-Add only modules required by the current step. Keep `/` as the only route until
-additional screens are implemented. Future route groups may organize auth and
-application layouts when those steps arrive.
+Add only modules required by the current step. Private screens belong under
+`/app` and must verify identity at their server data/action boundary as well as
+using the protected layout. The root remains a public UI preview for now.
 
 Run `npm run lint`, `npm run typecheck`, and `npm run build` after structural
 changes. Add behavior tests when meaningful behavior is introduced. Keep each
