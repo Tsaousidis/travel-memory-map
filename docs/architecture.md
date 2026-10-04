@@ -21,8 +21,9 @@ docs/                        Project documentation
 ```
 
 Folders reserved for later steps contain a README explaining their purpose.
-Authentication routes and a minimal protected landing page are implemented.
-Application navigation and travel features remain separate roadmap steps.
+Authentication routes and a responsive protected application shell are implemented.
+Map, Trips, and Dashboard currently show placeholders. Travel features remain
+separate roadmap steps. See [application shell](application-shell.md).
 
 ## Responsibilities and dependencies
 

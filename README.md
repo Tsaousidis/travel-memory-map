@@ -4,16 +4,18 @@ A personal, interactive map of your travels and memories.
 
 ## Status
 
-Step 8: authentication implemented; hosted signup/email/session verification
-is pending. Follow the [authentication guide](docs/authentication.md).
+Step 9: responsive application shell with Map, Trips, Dashboard, and account
+navigation. See the [shell guide](docs/application-shell.md).
+Password login has been verified on the hosted project; automatic email-callback
+sign-in remains pending as documented in [authentication](docs/authentication.md).
 Owner-based RLS was applied and confirmed on 2026-10-02;
 see the [RLS setup guide](docs/row-level-security.md).
 The initial schema was applied and verified by the project owner on 2026-10-02;
 see the [database setup guide](docs/database.md).
 Next.js App Router, TypeScript,
 Tailwind CSS, and ESLint are configured. Supabase browser/server clients are added;
-schema and policy migrations are in `supabase/migrations`. Authentication and
-travel features follow in subsequent steps.
+schema and policy migrations are in `supabase/migrations`. Travel features
+follow in subsequent steps.
 Deployment is outside the current scope.
 
 ## Architecture

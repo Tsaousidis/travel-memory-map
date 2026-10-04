@@ -1,18 +1,17 @@
-import { Container } from "@/components/layout/container";
 import { Card } from "@/components/ui/card";
-import { LogoutButton } from "@/features/auth/components/logout-button";
+import { EmptyState } from "@/components/ui/empty-state";
 import { getOwnProfile } from "@/features/auth/server";
 
-export const metadata = { title: "Your space | Travel Memory Map" };
+export const metadata = { title: "Map | Travel Memory Map" };
 
 export default async function AppPage() {
   const profile = await getOwnProfile();
-  return <main className="py-16"><Container>
-    <div className="mb-12 flex flex-wrap items-center justify-between gap-5"><span className="font-display text-xl">◎ Travel Memory Map</span><LogoutButton /></div>
-    <Card className="max-w-2xl">
-      <p className="eyebrow mb-5">Your personal space</p>
-      <h1 className="break-words text-4xl">Welcome{profile.display_name ? `, ${profile.display_name}` : ""}.</h1>
-      <p className="mt-6 text-muted">You are signed in. Your travel collection will grow here.</p>
+  return <section>
+    <p className="eyebrow mb-4">Explore the world you have visited</p>
+    <h1 className="break-words text-4xl sm:text-5xl">Welcome{profile.display_name ? `, ${profile.display_name}` : ""}.</h1>
+    <p className="mb-10 mt-5 max-w-xl text-muted">Some places stay with you. This is where you will find them again.</p>
+    <Card className="map-placeholder">
+      <EmptyState title="Your world starts here" description="An interactive map of your travel memories is coming soon. Your trips and places will appear here." />
     </Card>
-  </Container></main>;
+  </section>;
 }

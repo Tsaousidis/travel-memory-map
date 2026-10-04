@@ -35,6 +35,7 @@ test("login provisions profile, survives reload, redirects guest routes and logs
   await expect(page.getByRole("heading", { name: "Welcome, Alice." })).toBeVisible();
   await page.goto("/signup");
   await expect(page).toHaveURL(/\/app$/);
+  await page.getByLabel("Account menu").click();
   await page.getByRole("button", { name: "Sign out", exact: true }).click();
   await expect(page).toHaveURL(/\/login$/);
   await page.goto("/app");
