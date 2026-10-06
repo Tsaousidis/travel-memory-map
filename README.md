@@ -4,8 +4,10 @@ A personal, interactive map of your travels and memories.
 
 ## Status
 
-Step 9: responsive application shell with Map, Trips, Dashboard, and account
-navigation. See the [shell guide](docs/application-shell.md).
+Step 10: optional development seed with five fictional trips, nine cities, and
+fourteen places. See [demo data setup](docs/demo-data.md) to load it for your
+development account. The responsive Map, Trips, and Dashboard shell still shows
+placeholders; see the [shell guide](docs/application-shell.md).
 Password login has been verified on the hosted project; automatic email-callback
 sign-in remains pending as documented in [authentication](docs/authentication.md).
 Owner-based RLS was applied and confirmed on 2026-10-02;
