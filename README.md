@@ -4,43 +4,53 @@ A personal, interactive map of your travels and memories.
 
 ## Status
 
-Step 10: optional development seed with five fictional trips, nine cities, and
-fourteen places. See [demo data setup](docs/demo-data.md) to load it for your
-development account. The responsive Map, Trips, and Dashboard shell still shows
-placeholders; see the [shell guide](docs/application-shell.md).
-Password login has been verified on the hosted project; automatic email-callback
-sign-in remains pending as documented in [authentication](docs/authentication.md).
-Owner-based RLS was applied and confirmed on 2026-10-02;
-see the [RLS setup guide](docs/row-level-security.md).
-The initial schema was applied and verified by the project owner on 2026-10-02;
-see the [database setup guide](docs/database.md).
-Next.js App Router, TypeScript,
-Tailwind CSS, and ESLint are configured. Supabase browser/server clients are added;
-schema and policy migrations are in `supabase/migrations`. Travel features
-follow in subsequent steps.
-Deployment is outside the current scope.
-
-## Architecture
-
-Source code is organized into `app`, `components`, `features`, `lib`, `types`,
-and `utils`. See [architecture and conventions](docs/architecture.md) for folder
-responsibilities, naming, imports, and server/browser boundaries.
+In development with Next.js, TypeScript, Tailwind CSS, and Supabase.
+Authentication, owner-based database access, a responsive application shell,
+and fictional seed data are implemented. Map, Trips, and Dashboard currently
+show placeholders. Deployment is outside the current scope.
 
 ## Local development
 
-Use Node.js 24 LTS and npm 11.
+Use Node.js 24 LTS and npm 11. Install dependencies with `npm ci` and copy
+`.env.example` to `.env.local`.
+
+Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` for
+your Supabase project. Use a publishable key, never an administrative key.
+`APP_URL` defaults to `http://localhost:3000`; configure the same Site URL in
+Supabase Auth and allow `http://localhost:3000/auth/callback` as a redirect URL.
+Keep the default confirmation email template and open its link in the browser
+used for signup. Local environment files are ignored by Git.
+
+On a fresh Supabase database, apply the SQL files in `supabase/migrations` in
+filename order, once each. Existing configured projects do not need reapplying.
+SQL Editor execution does not update CLI migration history; reconcile that
+history before adopting CLI migration commands.
+
+The optional [seed](supabase/seed.sql) contains five trips, nine cities, and
+fourteen places. Replace its user-ID placeholder in an SQL Editor copy with an
+existing Auth user's UID. Re-running preserves existing records. Photos and
+Storage are not implemented yet.
 
 ```sh
-npm ci
+npm run check:supabase
 npm run dev
 ```
 
-Open http://localhost:3000.
+Open http://localhost:3000. The root previews shared UI components; `/app` is
+the protected application. On PowerShell, use `npm.cmd` if `npm.ps1` is blocked.
 
-The home route currently previews the shared UI components. See the
-[design system guide](docs/design-system.md) for tokens and component contracts.
+## Architecture
 
-On Windows PowerShell, use `npm.cmd` if execution policy blocks `npm.ps1`.
+Routes compose domain features and shared components. See
+[architecture and conventions](docs/architecture.md) and the
+[design system](docs/design-system.md).
+
+The database contains profiles, countries, cities, trips, trip-city associations,
+places, and photo records. Cities can be reused across trips; places represent
+visits within a specific trip. RLS restricts private records to their owner,
+while countries are read-only shared reference data. Composite foreign keys
+enforce ownership across related records. Photo records store object paths;
+future Storage cleanup must be coordinated separately from database cascades.
 
 ## Verification
 
@@ -48,16 +58,19 @@ On Windows PowerShell, use `npm.cmd` if execution policy blocks `npm.ps1`.
 npm run lint
 npm run typecheck
 npm run test:db
+npx playwright install chromium
+npm run test:auth
 npm run build
-npm start
 ```
 
-## Environment files
+Database tests use PGlite and the actual migrations. Browser tests use isolated
+mock services on ports 54329 and 3101, without real accounts or email delivery.
+Do not run the production build concurrently with browser tests. An existing
+Chromium installation can be selected with `PLAYWRIGHT_CHROMIUM_EXECUTABLE`.
 
-Copy `.env.example` to `.env.local` if you do not already have a local file.
-Configure Supabase using the [setup guide](docs/supabase.md), then run
-`npm run check:supabase`. The current homepage runs without these values;
-the map configuration defaults to a public demo style.
+## Known limitations
 
-See [environment setup](docs/environment.md) for variables, validation, and
-configuration instructions. Local `.env` files are ignored by Git.
+Hosted password login is verified; automatic sign-in through the hosted email
+confirmation callback still needs verification. Local mock tests do not replace
+that check. An October 2026 audit also identified a `braces` advisory in the
+ESLint dependency chain; dependency remediation remains pending.

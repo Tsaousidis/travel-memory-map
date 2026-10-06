@@ -12,6 +12,8 @@ src/
     layout.tsx               Root document layout
   components/                Shared, domain-independent UI
   features/
+    auth/                    Authentication forms, actions, and session checks
+    navigation/              Application shell and account controls
     design-system/components/ Component showcase and interactive examples
   lib/                       Shared integrations and configuration
   types/                     Types shared across features
@@ -22,8 +24,7 @@ docs/                        Project documentation
 
 Folders reserved for later steps contain a README explaining their purpose.
 Authentication routes and a responsive protected application shell are implemented.
-Map, Trips, and Dashboard currently show placeholders. Travel features remain
-separate roadmap steps. See [application shell](application-shell.md).
+Map, Trips, and Dashboard currently show placeholders.
 
 ## Responsibilities and dependencies
 
@@ -32,7 +33,7 @@ separate roadmap steps. See [application shell](application-shell.md).
 - `features/<feature>` owns its domain UI, validation, hooks, and data access.
   Create subfolders when real code requires them.
 - `components` holds shared presentation independent of individual features.
-- `lib` holds integration code and configuration, such as future Supabase clients.
+- `lib` holds integration code and configuration, including Supabase clients.
 - `utils` contains pure helpers. `types` contains shared type definitions.
 
 Dependencies flow from `app` to features and shared modules. Shared modules must
@@ -69,12 +70,8 @@ are introduced, guard them with `server-only`; never import them into Client
 Components. Pass serializable data across the boundary. Never expose secrets
 through public environment variables.
 
-## Working on a step
+## Private routes
 
-Add only modules required by the current step. Private screens belong under
+Private screens belong under
 `/app` and must verify identity at their server data/action boundary as well as
 using the protected layout. The root remains a public UI preview for now.
-
-Run `npm run lint`, `npm run typecheck`, and `npm run build` after structural
-changes. Add behavior tests when meaningful behavior is introduced. Keep each
-roadmap step reviewable as one commit, and stop before the next step.

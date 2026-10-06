@@ -49,29 +49,3 @@ Animations and transitions stop when reduced motion is requested. Loading states
 retain text without relying on animation. Skeletons need a nearby status label.
 
 Reference: [W3C native modal dialog technique](https://www.w3.org/WAI/WCAG22/Techniques/html/H102).
-
-## Verification on this Windows environment
-
-Lint passed. Browser checks covered 375px, 768px, and 1440px layouts, input
-validation, modal focus containment/restoration, Escape/close actions, and reduced
-motion. No browser page errors were observed.
-
-Windows Application Control blocked the native Next.js SWC binary during this
-step. Type checking and production build passed using the matching official
-WebAssembly compiler and Webpack. The standard Turbopack build remains blocked
-on this machine; its configuration has not been changed. The temporary compiler
-installation is not in package.json or the lockfile and is removed by npm ci.
-
-For the same local workaround in PowerShell (version must match Next.js):
-
-```powershell
-npm.cmd install --no-save --package-lock=false @next/swc-wasm-nodejs@16.3.6
-$env:NEXT_TEST_WASM_DIR = Join-Path $PWD 'node_modules/@next/swc-wasm-nodejs'
-npm.cmd run typecheck
-npm.cmd run build -- --webpack
-npm.cmd run dev -- --webpack
-```
-
-`NEXT_TEST_WASM_DIR` is an internal Next.js compiler override used here only for
-local verification, not a deployment setting or part of the app environment.
-Closing the terminal clears it. Do not disable Windows security policies.
