@@ -11,16 +11,18 @@ import {
   type ErrorEvent,
 } from "maplibre-gl";
 import { getMapConfig } from "@/lib/config/public-env";
-import type { TripPin } from "@/features/map/types";
+import type { PlacePin, TripPin } from "@/features/map/types";
 
 type MapStatus = "loading" | "ready" | "error";
 
 export function WorldMap({
   visitedCountryCodes,
   tripPins,
+  placePins,
 }: {
   visitedCountryCodes: string[];
   tripPins: TripPin[];
+  placePins: PlacePin[];
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
@@ -107,11 +109,84 @@ export function WorldMap({
         id: "trip-pins",
         type: "circle",
         source: "trip-pins",
+        maxzoom: 4.5,
         paint: {
           "circle-color": "#245b45",
           "circle-radius": 7,
           "circle-stroke-color": "#ffffff",
           "circle-stroke-width": 2,
+        },
+      });
+      map.addLayer({
+        id: "city-pins",
+        type: "circle",
+        source: "trip-pins",
+        minzoom: 4.5,
+        maxzoom: 8,
+        paint: {
+          "circle-color": "#245b45",
+          "circle-radius": 6,
+          "circle-stroke-color": "#ffffff",
+          "circle-stroke-width": 2,
+        },
+      });
+      map.addLayer({
+        id: "city-labels",
+        type: "symbol",
+        source: "trip-pins",
+        minzoom: 4.5,
+        maxzoom: 8,
+        layout: {
+          "text-field": ["get", "cityName"],
+          "text-size": 12,
+          "text-offset": [0, 1.2],
+          "text-anchor": "top",
+        },
+        paint: {
+          "text-color": "#243d35",
+          "text-halo-color": "#ffffff",
+          "text-halo-width": 1.5,
+        },
+      });
+      const placePinData: FeatureCollection<Point> = {
+        type: "FeatureCollection",
+        features: placePins.map((placePin) => ({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [placePin.longitude, placePin.latitude],
+          },
+          properties: placePin,
+        })),
+      };
+      map.addSource("place-pins", { type: "geojson", data: placePinData });
+      map.addLayer({
+        id: "place-pins",
+        type: "circle",
+        source: "place-pins",
+        minzoom: 8,
+        paint: {
+          "circle-color": "#c76b3f",
+          "circle-radius": 5,
+          "circle-stroke-color": "#ffffff",
+          "circle-stroke-width": 1.5,
+        },
+      });
+      map.addLayer({
+        id: "place-labels",
+        type: "symbol",
+        source: "place-pins",
+        minzoom: 8,
+        layout: {
+          "text-field": ["get", "placeName"],
+          "text-size": 11,
+          "text-offset": [0, 1.1],
+          "text-anchor": "top",
+        },
+        paint: {
+          "text-color": "#243d35",
+          "text-halo-color": "#ffffff",
+          "text-halo-width": 1.5,
         },
       });
 
@@ -154,6 +229,24 @@ export function WorldMap({
       map.on("mouseleave", "trip-pins", () => {
         map.getCanvas().style.cursor = "";
       });
+      map.on("click", "place-pins", (event) => {
+        const properties = event.features?.[0]?.properties;
+        if (!properties) {
+          return;
+        }
+        new Popup()
+          .setLngLat(event.lngLat)
+          .setText(
+            `${properties.placeName} · ${properties.cityName}\n${properties.tripTitle} · ${properties.category}`,
+          )
+          .addTo(map);
+      });
+      map.on("mouseenter", "place-pins", () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+      map.on("mouseleave", "place-pins", () => {
+        map.getCanvas().style.cursor = "";
+      });
       map.resize();
       setStatus("ready");
     };
@@ -172,7 +265,7 @@ export function WorldMap({
       map.remove();
       mapRef.current = null;
     };
-  }, [tripPins, visitedCountryCodes]);
+  }, [placePins, tripPins, visitedCountryCodes]);
 
   return (
     <div className="world-map" aria-label="Interactive world map" role="application">

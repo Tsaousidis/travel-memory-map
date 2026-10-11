@@ -7,9 +7,9 @@ A personal, interactive map of your travels and memories.
 In development with Next.js, TypeScript, Tailwind CSS, and Supabase.
 Authentication, owner-based database access, a responsive application shell,
 fictional seed data, the initial interactive MapLibre world map, visited country
-highlighting, and trip/city pins are implemented. Trips data views and
-Dashboard statistics are planned for later steps. Deployment is outside the
-current scope.
+highlighting, trip/city pins, and zoom-based city/place exploration are
+implemented. Trips data views and Dashboard statistics are planned for later
+steps. Deployment is outside the current scope.
 
 ## Local development
 

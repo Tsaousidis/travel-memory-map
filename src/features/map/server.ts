@@ -1,7 +1,7 @@
 import "server-only";
 
 import { requireUser } from "@/features/auth/server";
-import type { TripPin } from "@/features/map/types";
+import type { PlacePin, TripPin } from "@/features/map/types";
 
 export async function getVisitedCountryCodes() {
   const { supabase } = await requireUser();
@@ -56,6 +56,49 @@ export async function getTripPins(): Promise<TripPin[]> {
       latitude: city.latitude,
       startDate: trip.start_date,
       endDate: trip.end_date,
+    }];
+  });
+}
+
+export async function getPlacePins(): Promise<PlacePin[]> {
+  const { supabase } = await requireUser();
+  const [
+    { data: places, error: placesError },
+    { data: tripCities, error: tripCitiesError },
+    { data: cities, error: citiesError },
+    { data: trips, error: tripsError },
+  ] = await Promise.all([
+    supabase.from("places").select("id, trip_id, trip_city_id, name, category, latitude, longitude, visited_on"),
+    supabase.from("trip_cities").select("id, city_id"),
+    supabase.from("cities").select("id, name"),
+    supabase.from("trips").select("id, title"),
+  ]);
+
+  if (placesError || tripCitiesError || citiesError || tripsError) {
+    throw new Error("Unable to load places. Please try again.");
+  }
+
+  const tripCitiesById = new Map((tripCities ?? []).map((tripCity) => [tripCity.id, tripCity]));
+  const citiesById = new Map((cities ?? []).map((city) => [city.id, city]));
+  const tripsById = new Map((trips ?? []).map((trip) => [trip.id, trip]));
+
+  return (places ?? []).flatMap((place) => {
+    const tripCity = tripCitiesById.get(place.trip_city_id);
+    const city = tripCity ? citiesById.get(tripCity.city_id) : undefined;
+    const trip = tripsById.get(place.trip_id);
+    if (!city || !trip) {
+      return [];
+    }
+
+    return [{
+      id: place.id,
+      placeName: place.name,
+      cityName: city.name,
+      tripTitle: trip.title,
+      category: place.category,
+      longitude: place.longitude,
+      latitude: place.latitude,
+      visitedOn: place.visited_on,
     }];
   });
 }
