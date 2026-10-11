@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { FeatureCollection, Point } from "geojson";
 import {
   FullscreenControl,
   Map,
@@ -10,10 +11,17 @@ import {
   type ErrorEvent,
 } from "maplibre-gl";
 import { getMapConfig } from "@/lib/config/public-env";
+import type { TripPin } from "@/features/map/types";
 
 type MapStatus = "loading" | "ready" | "error";
 
-export function WorldMap({ visitedCountryCodes }: { visitedCountryCodes: string[] }) {
+export function WorldMap({
+  visitedCountryCodes,
+  tripPins,
+}: {
+  visitedCountryCodes: string[];
+  tripPins: TripPin[];
+}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
   const [status, setStatus] = useState<MapStatus>("loading");
@@ -83,6 +91,29 @@ export function WorldMap({ visitedCountryCodes }: { visitedCountryCodes: string[
         },
         filter: ["in", ["get", "ISO3166-1-Alpha-2"], ["literal", visitedCountryCodes]],
       });
+      const tripPinData: FeatureCollection<Point> = {
+        type: "FeatureCollection",
+        features: tripPins.map((tripPin) => ({
+          type: "Feature",
+          geometry: {
+            type: "Point",
+            coordinates: [tripPin.longitude, tripPin.latitude],
+          },
+          properties: tripPin,
+        })),
+      };
+      map.addSource("trip-pins", { type: "geojson", data: tripPinData });
+      map.addLayer({
+        id: "trip-pins",
+        type: "circle",
+        source: "trip-pins",
+        paint: {
+          "circle-color": "#245b45",
+          "circle-radius": 7,
+          "circle-stroke-color": "#ffffff",
+          "circle-stroke-width": 2,
+        },
+      });
 
       map.on("click", "visited-countries-fill", (event) => {
         const feature = event.features?.[0];
@@ -104,6 +135,25 @@ export function WorldMap({ visitedCountryCodes }: { visitedCountryCodes: string[
       map.on("mouseleave", "visited-countries-fill", () => {
         map.getCanvas().style.cursor = "";
       });
+      map.on("click", "trip-pins", (event) => {
+        const feature = event.features?.[0];
+        const properties = feature?.properties;
+        if (!properties) {
+          return;
+        }
+        new Popup()
+          .setLngLat(event.lngLat)
+          .setText(
+            `${properties.tripTitle} · ${properties.cityName}, ${properties.countryCode}\n${properties.startDate} – ${properties.endDate}`,
+          )
+          .addTo(map);
+      });
+      map.on("mouseenter", "trip-pins", () => {
+        map.getCanvas().style.cursor = "pointer";
+      });
+      map.on("mouseleave", "trip-pins", () => {
+        map.getCanvas().style.cursor = "";
+      });
       map.resize();
       setStatus("ready");
     };
@@ -122,7 +172,7 @@ export function WorldMap({ visitedCountryCodes }: { visitedCountryCodes: string[
       map.remove();
       mapRef.current = null;
     };
-  }, [visitedCountryCodes]);
+  }, [tripPins, visitedCountryCodes]);
 
   return (
     <div className="world-map" aria-label="Interactive world map" role="application">
