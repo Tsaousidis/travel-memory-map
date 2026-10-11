@@ -91,8 +91,10 @@
   .account-avatar { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--soft); border: 1px solid var(--border); font-weight: 600; }
   .account-panel { position: absolute; z-index: 20; top: calc(100% + .75rem); right: 0; width: min(19rem, calc(100vw - 2.5rem)); padding: 1.25rem; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); box-shadow: 0 12px 35px #243d351a; }
   .map-card { padding: 0; overflow: hidden; }
-  .world-map { position: relative; min-height: clamp(24rem, 58vh, 42rem); overflow: hidden; border-radius: calc(var(--radius) - 1px); background: #dce7e5; }
-  .world-map__canvas { position: absolute; inset: 0; }
+  .world-map { position: relative; height: clamp(24rem, 58vh, 42rem); overflow: hidden; border-radius: calc(var(--radius) - 1px); background: #dce7e5; }
+  .world-map__canvas, .world-map .maplibregl-map { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .world-map .maplibregl-canvas { outline: none; }
+  .world-map .maplibregl-popup-content { color: var(--foreground); font-family: var(--font-sans); line-height: 1.5; }
   .world-map__status { position: absolute; top: 1rem; left: 1rem; display: flex; align-items: center; gap: .65rem; max-width: min(24rem, calc(100% - 2rem)); padding: .7rem 1rem; border: 1px solid var(--border); border-radius: .6rem; background: #fffffff2; color: var(--muted); font-size: .875rem; box-shadow: 0 6px 20px #243d3514; }
   .world-map__status--error { display: grid; gap: .2rem; color: var(--danger); }
   @media (min-width: 1024px) {

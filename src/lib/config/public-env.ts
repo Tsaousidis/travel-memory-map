@@ -43,9 +43,13 @@ export function getMapConfig() {
   const styleUrl =
     process.env.NEXT_PUBLIC_MAP_STYLE_URL?.trim() ||
     "https://demotiles.maplibre.org/style.json";
+  const countriesUrl =
+    process.env.NEXT_PUBLIC_MAP_COUNTRIES_URL?.trim() ||
+    "https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson";
 
   return {
     styleUrl: requireHttpUrl(styleUrl, "NEXT_PUBLIC_MAP_STYLE_URL"),
+    countriesUrl: requireHttpUrl(countriesUrl, "NEXT_PUBLIC_MAP_COUNTRIES_URL"),
     // MapLibre coordinates are [longitude, latitude].
     center: [0, 20] as [number, number],
     zoom: 1.5,
