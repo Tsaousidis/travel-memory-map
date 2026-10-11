@@ -15,6 +15,7 @@ src/
     auth/                    Authentication forms, actions, and session checks
     navigation/              Application shell and account controls
     design-system/components/ Component showcase and interactive examples
+    map/components/          Client-only MapLibre map UI
   lib/                       Shared integrations and configuration
   types/                     Types shared across features
   utils/                     Pure shared helpers
@@ -23,8 +24,9 @@ docs/                        Project documentation
 ```
 
 Folders reserved for later steps contain a README explaining their purpose.
-Authentication routes and a responsive protected application shell are implemented.
-Map, Trips, and Dashboard currently show placeholders.
+Authentication routes, a responsive protected application shell, and the
+initial MapLibre world map are implemented. Visited-country layers, trip pins,
+Trips, and Dashboard data views are added in later steps.
 
 ## Responsibilities and dependencies
 
@@ -63,7 +65,8 @@ enforcement at this stage.
 
 Keep pages and layouts as Server Components by default. Add `"use client"` at
 the smallest interactive boundary needing hooks, event handlers, or browser APIs.
-Future MapLibre rendering belongs behind such a boundary.
+MapLibre rendering belongs behind such a boundary, as in
+`features/map/components/world-map.tsx`.
 
 Keep server-only integrations separate from browser clients. When server modules
 are introduced, guard them with `server-only`; never import them into Client

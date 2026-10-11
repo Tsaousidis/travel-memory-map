@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "maplibre-gl/dist/maplibre-gl.css";
 
 :root {
   color-scheme: light;
@@ -89,8 +90,11 @@
   .account-trigger::-webkit-details-marker { display: none; }
   .account-avatar { display: grid; place-items: center; width: 2.5rem; height: 2.5rem; border-radius: 50%; background: var(--soft); border: 1px solid var(--border); font-weight: 600; }
   .account-panel { position: absolute; z-index: 20; top: calc(100% + .75rem); right: 0; width: min(19rem, calc(100vw - 2.5rem)); padding: 1.25rem; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); box-shadow: 0 12px 35px #243d351a; }
-  .map-placeholder { display: grid; place-items: center; min-height: clamp(20rem, 48vh, 36rem); background-color: var(--surface); background-image: linear-gradient(#d8dfd533 1px, transparent 1px), linear-gradient(90deg, #d8dfd533 1px, transparent 1px); background-size: 40px 40px; }
-  .map-placeholder .empty-state { background: var(--surface); border-radius: var(--radius); }
+  .map-card { padding: 0; overflow: hidden; }
+  .world-map { position: relative; min-height: clamp(24rem, 58vh, 42rem); overflow: hidden; border-radius: calc(var(--radius) - 1px); background: #dce7e5; }
+  .world-map__canvas { position: absolute; inset: 0; }
+  .world-map__status { position: absolute; top: 1rem; left: 1rem; display: flex; align-items: center; gap: .65rem; max-width: min(24rem, calc(100% - 2rem)); padding: .7rem 1rem; border: 1px solid var(--border); border-radius: .6rem; background: #fffffff2; color: var(--muted); font-size: .875rem; box-shadow: 0 6px 20px #243d3514; }
+  .world-map__status--error { display: grid; gap: .2rem; color: var(--danger); }
   @media (min-width: 1024px) {
     .application-shell { display: grid; grid-template-columns: 16rem minmax(0, 1fr); }
     .app-sidebar { display: flex; flex-direction: column; position: sticky; top: 0; height: 100dvh; border-bottom: 0; border-right: 1px solid var(--border); padding: 1.5rem 1rem; }

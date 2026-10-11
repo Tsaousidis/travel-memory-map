@@ -6,8 +6,10 @@ A personal, interactive map of your travels and memories.
 
 In development with Next.js, TypeScript, Tailwind CSS, and Supabase.
 Authentication, owner-based database access, a responsive application shell,
-and fictional seed data are implemented. Map, Trips, and Dashboard currently
-show placeholders. Deployment is outside the current scope.
+fictional seed data, and the initial interactive MapLibre world map are
+implemented. Visited-country layers, trip pins, Trips data views, and Dashboard
+statistics are planned for later steps. Deployment is outside the current
+scope.
 
 ## Local development
 
@@ -37,7 +39,8 @@ npm run dev
 ```
 
 Open http://localhost:3000. The root previews shared UI components; `/app` is
-the protected application. On PowerShell, use `npm.cmd` if `npm.ps1` is blocked.
+the protected application and includes the initial interactive world map. On
+PowerShell, use `npm.cmd` if `npm.ps1` is blocked.
 
 ## Architecture
 
