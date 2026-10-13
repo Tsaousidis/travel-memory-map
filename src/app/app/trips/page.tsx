@@ -2,15 +2,22 @@ import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getTripSummaries } from "@/features/map/server";
 import { TripCard } from "@/features/trips/components/trip-card";
+import { CreateTripForm } from "@/features/trips/components/create-trip-form";
+import { getCountries } from "@/features/trips/server";
 
 export const metadata = { title: "Trips | Travel Memory Map" };
 
 export default async function TripsPage() {
-  const trips = await getTripSummaries();
+  const [trips, countries] = await Promise.all([getTripSummaries(), getCountries()]);
   return <section>
     <p className="eyebrow mb-4">The journeys behind the pins</p>
     <h1 className="text-4xl sm:text-5xl">Your trips</h1>
     <p className="mb-10 mt-5 max-w-xl text-muted">Every journey deserves a place of its own.</p>
+    <Card className="create-trip-card">
+      <p className="eyebrow mb-3">New journey</p>
+      <h2 className="mb-6">Record a trip</h2>
+      <CreateTripForm countries={countries} />
+    </Card>
     {trips.length === 0 ? (
       <Card><EmptyState title="A home for every journey" description="Your trip collection is empty for now. Your future journeys will appear here." /></Card>
     ) : (

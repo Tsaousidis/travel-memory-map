@@ -8,8 +8,9 @@ In development with Next.js, TypeScript, Tailwind CSS, and Supabase.
 Authentication, owner-based database access, a responsive application shell,
 fictional seed data, the initial interactive MapLibre world map, visited country
 highlighting, trip/city pins, zoom-based city/place exploration, and a Trips
-overview are implemented. Trip details, CRUD, and Dashboard statistics are
-planned for later steps. Deployment is outside the current scope.
+overview and trip creation are implemented. Trip details, editing/deletion,
+photos, and Dashboard statistics are planned for later steps. Deployment is
+outside the current scope.
 
 ## Local development
 
