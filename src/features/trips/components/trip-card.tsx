@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import type { TripSummary } from "@/features/map/types";
 
@@ -30,6 +31,9 @@ export function TripCard({ trip }: { trip: TripSummary }) {
           <div><dt>Places</dt><dd>{trip.placeCount}</dd></div>
           <div><dt>Photos</dt><dd>{trip.photoCount}</dd></div>
         </dl>
+        <div className="trip-card__actions">
+          <Link className="button button--secondary" href={`/app/trips/${trip.id}/edit`}>Edit trip</Link>
+        </div>
       </div>
     </Card>
   );

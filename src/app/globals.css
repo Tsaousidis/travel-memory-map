@@ -100,6 +100,10 @@
   .trip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 1.25rem; }
   .create-trip-card { margin-bottom: 2rem; }
   .create-trip-form { display: grid; gap: 1.25rem; max-width: 58rem; }
+  .edit-trip-layout { display: grid; gap: 2rem; max-width: 58rem; }
+  .danger-zone { display: grid; gap: .75rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+  .danger-zone h2 { font-size: 1.5rem; }
+  .trip-card__actions { display: flex; margin-top: 1.25rem; }
   .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
   .city-fields { display: grid; gap: 1rem; margin: 0; padding: 1rem; border: 1px solid var(--border); border-radius: .75rem; }
   .city-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; align-items: end; gap: .75rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }

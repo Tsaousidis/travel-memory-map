@@ -127,6 +127,7 @@ export async function getTripSummaries(): Promise<TripSummary[]> {
   return (trips ?? []).map((trip) => ({
     id: trip.id,
     title: trip.title,
+    countryCode: trip.primary_country_code,
     countryName: countryNames.get(trip.primary_country_code) ?? trip.primary_country_code,
     startDate: trip.start_date,
     endDate: trip.end_date,

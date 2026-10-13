@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getOwnProfile, requireUser } from "@/features/auth/server";
-import { validateTripForm, type TripFormState } from "./validation";
+import { validateTripDetails, validateTripForm, type TripFormState } from "./validation";
 
 export async function createTrip(_previous: TripFormState, form: FormData): Promise<TripFormState> {
   const values = validateTripForm(form);
@@ -59,6 +59,41 @@ export async function createTrip(_previous: TripFormState, form: FormData): Prom
     });
     if (linkError) return fail("Unable to finish the trip. Please try again.");
   }
+
+  revalidatePath("/app");
+  revalidatePath("/app/trips");
+  redirect("/app/trips");
+}
+
+export async function updateTrip(_previous: TripFormState, form: FormData): Promise<TripFormState> {
+  const tripId = String(form.get("tripId") ?? "").trim();
+  const values = validateTripDetails(form);
+  if (!tripId || !values.valid) return { error: "Check the highlighted fields.", fields: values.fields };
+
+  const { supabase } = await requireUser();
+  const { data, error } = await supabase.from("trips").update({
+    title: values.title,
+    primary_country_code: values.countryCode,
+    start_date: values.startDate,
+    end_date: values.endDate,
+    description: values.description,
+  }).eq("id", tripId).select("id").maybeSingle();
+
+  if (error || !data) return { error: "Unable to update the trip. Please try again." };
+
+  revalidatePath("/app");
+  revalidatePath("/app/trips");
+  revalidatePath(`/app/trips/${tripId}/edit`);
+  redirect("/app/trips");
+}
+
+export async function deleteTrip(_previous: TripFormState, form: FormData): Promise<TripFormState> {
+  const tripId = String(form.get("tripId") ?? "").trim();
+  if (!tripId) return { error: "Unable to delete the trip. Please try again." };
+
+  const { supabase } = await requireUser();
+  const { error } = await supabase.from("trips").delete().eq("id", tripId);
+  if (error) return { error: "Unable to delete the trip. Please try again." };
 
   revalidatePath("/app");
   revalidatePath("/app/trips");

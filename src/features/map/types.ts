@@ -23,6 +23,7 @@ export type PlacePin = {
 export type TripSummary = {
   id: string;
   title: string;
+  countryCode: string;
   countryName: string;
   startDate: string;
   endDate: string;

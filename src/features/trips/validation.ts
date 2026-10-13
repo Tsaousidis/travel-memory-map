@@ -11,13 +11,29 @@ export type TripCityInput = {
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
-export function validateTripForm(form: FormData) {
+export function validateTripDetails(form: FormData) {
   const title = String(form.get("title") ?? "").trim();
   const countryCode = String(form.get("countryCode") ?? "").trim().toUpperCase();
   const startDate = String(form.get("startDate") ?? "").trim();
   const endDate = String(form.get("endDate") ?? "").trim();
   const description = String(form.get("description") ?? "").trim();
   const fields: Record<string, string> = {};
+
+  if (!title || title.length > 150) fields.title = "Use between 1 and 150 characters.";
+  if (!/^[A-Z]{2}$/.test(countryCode)) fields.countryCode = "Choose a country.";
+  if (!ISO_DATE.test(startDate)) fields.startDate = "Enter a valid start date.";
+  if (!ISO_DATE.test(endDate)) fields.endDate = "Enter a valid end date.";
+  if (ISO_DATE.test(startDate) && ISO_DATE.test(endDate) && endDate < startDate) {
+    fields.endDate = "End date must be on or after the start date.";
+  }
+  if (description.length > 10000) fields.description = "Use 10,000 characters or fewer.";
+
+  return { title, countryCode, startDate, endDate, description, fields, valid: Object.keys(fields).length === 0 };
+}
+
+export function validateTripForm(form: FormData) {
+  const details = validateTripDetails(form);
+  const fields = { ...details.fields };
   let cities: TripCityInput[] = [];
 
   try {
@@ -36,18 +52,10 @@ export function validateTripForm(form: FormData) {
     fields.cities = "Add at least one city with valid coordinates.";
   }
 
-  if (!title || title.length > 150) fields.title = "Use between 1 and 150 characters.";
-  if (!/^[A-Z]{2}$/.test(countryCode)) fields.countryCode = "Choose a country.";
-  if (!ISO_DATE.test(startDate)) fields.startDate = "Enter a valid start date.";
-  if (!ISO_DATE.test(endDate)) fields.endDate = "Enter a valid end date.";
-  if (ISO_DATE.test(startDate) && ISO_DATE.test(endDate) && endDate < startDate) {
-    fields.endDate = "End date must be on or after the start date.";
-  }
-  if (description.length > 10000) fields.description = "Use 10,000 characters or fewer.";
   if (cities.length === 0) fields.cities = "Add at least one city with valid coordinates.";
   if (cities.some((city) => city.name.length > 150 || city.latitude < -90 || city.latitude > 90 || city.longitude < -180 || city.longitude > 180)) {
     fields.cities = "Use valid city names and coordinates.";
   }
 
-  return { title, countryCode, startDate, endDate, description, cities, fields, valid: Object.keys(fields).length === 0 };
+  return { ...details, cities, fields: { ...details.fields, ...fields }, valid: Object.keys({ ...details.fields, ...fields }).length === 0 };
 }
