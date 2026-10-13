@@ -1,7 +1,7 @@
 import "server-only";
 
 import { requireUser } from "@/features/auth/server";
-import type { PlacePin, TripPin } from "@/features/map/types";
+import type { PlacePin, TripPin, TripSummary } from "@/features/map/types";
 
 export async function getVisitedCountryCodes() {
   const { supabase } = await requireUser();
@@ -43,10 +43,7 @@ export async function getTripPins(): Promise<TripPin[]> {
   return (tripCities ?? []).flatMap((tripCity) => {
     const trip = tripsById.get(tripCity.trip_id);
     const city = citiesById.get(tripCity.city_id);
-    if (!trip || !city) {
-      return [];
-    }
-
+    if (!trip || !city) return [];
     return [{
       id: `${trip.id}-${city.id}`,
       tripTitle: trip.title,
@@ -86,10 +83,7 @@ export async function getPlacePins(): Promise<PlacePin[]> {
     const tripCity = tripCitiesById.get(place.trip_city_id);
     const city = tripCity ? citiesById.get(tripCity.city_id) : undefined;
     const trip = tripsById.get(place.trip_id);
-    if (!city || !trip) {
-      return [];
-    }
-
+    if (!city || !trip) return [];
     return [{
       id: place.id,
       placeName: place.name,
@@ -101,4 +95,44 @@ export async function getPlacePins(): Promise<PlacePin[]> {
       visitedOn: place.visited_on,
     }];
   });
+}
+
+export async function getTripSummaries(): Promise<TripSummary[]> {
+  const { supabase } = await requireUser();
+  const [
+    { data: trips, error: tripsError },
+    { data: countries, error: countriesError },
+    { data: tripCities, error: tripCitiesError },
+    { data: places, error: placesError },
+    { data: photos, error: photosError },
+  ] = await Promise.all([
+    supabase.from("trips").select("id, title, primary_country_code, start_date, end_date, description").order("start_date", { ascending: false }),
+    supabase.from("countries").select("code, name"),
+    supabase.from("trip_cities").select("trip_id"),
+    supabase.from("places").select("trip_id"),
+    supabase.from("photos").select("trip_id"),
+  ]);
+
+  if (tripsError || countriesError || tripCitiesError || placesError || photosError) {
+    throw new Error("Unable to load your trips. Please try again.");
+  }
+
+  const countryNames = new Map((countries ?? []).map((country) => [country.code, country.name]));
+  const countByTrip = (rows: Array<{ trip_id: string }>) =>
+    rows.reduce((counts, row) => counts.set(row.trip_id, (counts.get(row.trip_id) ?? 0) + 1), new Map<string, number>());
+  const cityCounts = countByTrip(tripCities ?? []);
+  const placeCounts = countByTrip(places ?? []);
+  const photoCounts = countByTrip(photos ?? []);
+
+  return (trips ?? []).map((trip) => ({
+    id: trip.id,
+    title: trip.title,
+    countryName: countryNames.get(trip.primary_country_code) ?? trip.primary_country_code,
+    startDate: trip.start_date,
+    endDate: trip.end_date,
+    description: trip.description,
+    cityCount: cityCounts.get(trip.id) ?? 0,
+    placeCount: placeCounts.get(trip.id) ?? 0,
+    photoCount: photoCounts.get(trip.id) ?? 0,
+  }));
 }

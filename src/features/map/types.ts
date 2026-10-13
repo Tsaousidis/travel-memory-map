@@ -19,3 +19,15 @@ export type PlacePin = {
   latitude: number;
   visitedOn: string | null;
 };
+
+export type TripSummary = {
+  id: string;
+  title: string;
+  countryName: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  cityCount: number;
+  placeCount: number;
+  photoCount: number;
+};

@@ -97,6 +97,17 @@
   .world-map .maplibregl-popup-content { color: var(--foreground); font-family: var(--font-sans); line-height: 1.5; }
   .world-map__status { position: absolute; top: 1rem; left: 1rem; display: flex; align-items: center; gap: .65rem; max-width: min(24rem, calc(100% - 2rem)); padding: .7rem 1rem; border: 1px solid var(--border); border-radius: .6rem; background: #fffffff2; color: var(--muted); font-size: .875rem; box-shadow: 0 6px 20px #243d3514; }
   .world-map__status--error { display: grid; gap: .2rem; color: var(--danger); }
+  .trip-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 1.25rem; }
+  .trip-card { overflow: hidden; padding: 0; }
+  .trip-card__cover { display: grid; place-items: center; min-height: 9rem; background: linear-gradient(135deg, #dce9df, #b8d0c0); color: #245b45; font-size: 2rem; }
+  .trip-card__body { padding: 1.35rem; }
+  .trip-card__title { margin-top: .4rem; font-size: 1.8rem; }
+  .trip-card__dates { margin-top: .4rem; color: var(--muted); font-size: .85rem; }
+  .trip-card__description { min-height: 3.2rem; margin-top: 1rem; color: var(--muted); font-size: .9rem; }
+  .trip-card__stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+  .trip-card__stats div { display: grid; gap: .1rem; }
+  .trip-card__stats dt { color: var(--muted); font-size: .7rem; }
+  .trip-card__stats dd { font-weight: 700; }
   @media (min-width: 1024px) {
     .application-shell { display: grid; grid-template-columns: 16rem minmax(0, 1fr); }
     .app-sidebar { display: flex; flex-direction: column; position: sticky; top: 0; height: 100dvh; border-bottom: 0; border-right: 1px solid var(--border); padding: 1.5rem 1rem; }
