@@ -27,8 +27,8 @@ Folders reserved for later steps contain a README explaining their purpose.
 Authentication routes, a responsive protected application shell, the initial
 MapLibre world map, visited-country layers, trip pins, and zoom-based city/place
 layers are implemented. Trips include creation, a details view, metadata
-editing, deletion, and place management; Dashboard data views are added in
-later steps.
+editing, deletion, place management, and trip-specific maps; Dashboard data
+views are added in later steps.
 
 ## Responsibilities and dependencies
 

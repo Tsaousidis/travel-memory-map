@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { getTripDetails } from "@/features/map/server";
+import { TripMap } from "@/features/map/components/trip-map";
 import { PlacesManager } from "@/features/trips/components/places-manager";
 
 export const metadata = { title: "Trip details | Travel Memory Map" };
@@ -30,6 +31,13 @@ export default async function TripDetailsPage({ params }: { params: Promise<{ id
         </div>
         <a className="button button--secondary" href={`/app/trips/${trip.id}/edit`}>Edit trip</a>
       </div>
+      <Card className="trip-map-card">
+        <p className="eyebrow mb-4">Trip map</p>
+        <h2>Places along the way</h2>
+        {trip.cities.length === 0 && trip.places.length === 0
+          ? <p className="mt-4 text-muted">Add a city or place to see this trip on a map.</p>
+          : <TripMap trip={trip} />}
+      </Card>
       <dl className="trip-details-stats">
         <div><dt>Dates</dt><dd>{formatDate(trip.startDate)} – {formatDate(trip.endDate)}</dd></div>
         <div><dt>Days</dt><dd>{getTripDays(trip.startDate, trip.endDate)}</dd></div>
