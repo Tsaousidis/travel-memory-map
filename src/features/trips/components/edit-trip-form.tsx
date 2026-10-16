@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { deleteTrip, updateTrip } from "@/features/trips/actions";
@@ -42,7 +43,7 @@ export function EditTripForm({ trip, countries }: { trip: Trip; countries: Count
         {state.error && <p className="form-error" role="alert">{state.error}</p>}
         <div className="flex flex-wrap gap-3">
           <Button type="submit" loading={pending}>Save changes</Button>
-          <a className="button button--secondary" href="/app/trips">Cancel</a>
+          <Link className="button button--secondary" href="/app/trips">Cancel</Link>
         </div>
       </form>
       <section className="danger-zone" aria-labelledby="delete-trip-heading">

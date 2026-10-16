@@ -20,7 +20,7 @@ export function TripCard({ trip }: { trip: TripSummary }) {
       </div>
       <div className="trip-card__body">
         <p className="eyebrow">{trip.countryName}</p>
-        <h2 className="trip-card__title">{trip.title}</h2>
+        <h2 className="trip-card__title"><Link href={`/app/trips/${trip.id}`}>{trip.title}</Link></h2>
         <p className="trip-card__dates">
           {formatDate(trip.startDate)} – {formatDate(trip.endDate)}
         </p>
@@ -32,6 +32,7 @@ export function TripCard({ trip }: { trip: TripSummary }) {
           <div><dt>Photos</dt><dd>{trip.photoCount}</dd></div>
         </dl>
         <div className="trip-card__actions">
+          <Link className="button button--primary" href={`/app/trips/${trip.id}`}>Explore trip</Link>
           <Link className="button button--secondary" href={`/app/trips/${trip.id}/edit`}>Edit trip</Link>
         </div>
       </div>

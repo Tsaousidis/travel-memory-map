@@ -32,3 +32,16 @@ export type TripSummary = {
   placeCount: number;
   photoCount: number;
 };
+
+export type TripDetails = {
+  id: string;
+  title: string;
+  countryName: string;
+  startDate: string;
+  endDate: string;
+  description: string;
+  notes: string;
+  cities: Array<{ id: string; name: string; countryCode: string; latitude: number; longitude: number }>;
+  places: Array<{ id: string; name: string; category: string; cityName: string; visitedOn: string | null }>;
+  photoCount: number;
+};

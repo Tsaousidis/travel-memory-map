@@ -104,6 +104,18 @@
   .danger-zone { display: grid; gap: .75rem; padding-top: 2rem; border-top: 1px solid var(--border); }
   .danger-zone h2 { font-size: 1.5rem; }
   .trip-card__actions { display: flex; margin-top: 1.25rem; }
+  .trip-card__actions { flex-wrap: wrap; gap: .6rem; }
+  .trip-card__title a:hover { color: var(--accent); }
+  .trip-details-page { display: grid; gap: 2rem; }
+  .trip-details-heading { display: flex; align-items: start; justify-content: space-between; gap: 2rem; }
+  .trip-details-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 1rem; padding: 1.25rem; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+  .trip-details-stats div { display: grid; gap: .25rem; }
+  .trip-details-stats dt { color: var(--muted); font-size: .75rem; }
+  .trip-details-stats dd { font-weight: 700; }
+  .trip-details-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+  .trip-details-list { display: grid; gap: .75rem; margin-top: 1.25rem; }
+  .trip-details-list li { display: flex; justify-content: space-between; gap: 1rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); }
+  .trip-details-list span { color: var(--muted); font-size: .875rem; text-align: right; }
   .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
   .city-fields { display: grid; gap: 1rem; margin: 0; padding: 1rem; border: 1px solid var(--border); border-radius: .75rem; }
   .city-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; align-items: end; gap: .75rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
@@ -127,8 +139,9 @@
     .app-nav-link { justify-content: flex-start; padding-inline: 1rem; gap: 1rem; }
   }
   @media (max-width: 640px) {
-    .form-grid, .city-row { grid-template-columns: 1fr; }
+    .form-grid, .city-row, .trip-details-grid { grid-template-columns: 1fr; }
     .city-row { align-items: stretch; }
+    .trip-details-heading { display: grid; }
   }
 }
 @keyframes pulse { 50% { opacity: .45; } }
