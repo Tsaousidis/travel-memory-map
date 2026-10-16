@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getOwnProfile, requireUser } from "@/features/auth/server";
-import { validateTripDetails, validateTripForm, type TripFormState } from "./validation";
+import { validatePlaceForm, validateTripDetails, validateTripForm, type PlaceFormState, type TripFormState } from "./validation";
 
 export async function createTrip(_previous: TripFormState, form: FormData): Promise<TripFormState> {
   const values = validateTripForm(form);
@@ -98,4 +98,65 @@ export async function deleteTrip(_previous: TripFormState, form: FormData): Prom
   revalidatePath("/app");
   revalidatePath("/app/trips");
   redirect("/app/trips");
+}
+
+export async function createPlace(_previous: PlaceFormState, form: FormData): Promise<PlaceFormState> {
+  const tripId = String(form.get("tripId") ?? "").trim();
+  const values = validatePlaceForm(form);
+  if (!tripId || !values.valid) return { error: "Check the highlighted fields.", fields: values.fields };
+
+  const { supabase, user } = await requireUser();
+  const { error } = await supabase.from("places").insert({
+    user_id: user.id,
+    trip_id: tripId,
+    trip_city_id: values.tripCityId,
+    name: values.name,
+    category: values.category,
+    latitude: values.latitude,
+    longitude: values.longitude,
+    visited_on: values.visitedOn || null,
+    notes: values.notes,
+  });
+  if (error) return { error: "Unable to create the place. Please try again." };
+
+  revalidatePath(`/app/trips/${tripId}`);
+  revalidatePath("/app");
+  redirect(`/app/trips/${tripId}`);
+}
+
+export async function updatePlace(_previous: PlaceFormState, form: FormData): Promise<PlaceFormState> {
+  const tripId = String(form.get("tripId") ?? "").trim();
+  const placeId = String(form.get("placeId") ?? "").trim();
+  const values = validatePlaceForm(form);
+  if (!tripId || !placeId || !values.valid) return { error: "Check the highlighted fields.", fields: values.fields };
+
+  const { supabase } = await requireUser();
+  const { data, error } = await supabase.from("places").update({
+    trip_city_id: values.tripCityId,
+    name: values.name,
+    category: values.category,
+    latitude: values.latitude,
+    longitude: values.longitude,
+    visited_on: values.visitedOn || null,
+    notes: values.notes,
+  }).eq("id", placeId).eq("trip_id", tripId).select("id").maybeSingle();
+  if (error || !data) return { error: "Unable to update the place. Please try again." };
+
+  revalidatePath(`/app/trips/${tripId}`);
+  revalidatePath("/app");
+  redirect(`/app/trips/${tripId}`);
+}
+
+export async function deletePlace(_previous: PlaceFormState, form: FormData): Promise<PlaceFormState> {
+  const tripId = String(form.get("tripId") ?? "").trim();
+  const placeId = String(form.get("placeId") ?? "").trim();
+  if (!tripId || !placeId) return { error: "Unable to delete the place. Please try again." };
+
+  const { supabase } = await requireUser();
+  const { error } = await supabase.from("places").delete().eq("id", placeId).eq("trip_id", tripId);
+  if (error) return { error: "Unable to delete the place. Please try again." };
+
+  revalidatePath(`/app/trips/${tripId}`);
+  revalidatePath("/app");
+  redirect(`/app/trips/${tripId}`);
 }

@@ -152,7 +152,7 @@ export async function getTripDetails(tripId: string): Promise<TripDetails | null
     supabase.from("countries").select("code, name"),
     supabase.from("trip_cities").select("id, city_id").eq("trip_id", tripId).order("sort_order"),
     supabase.from("cities").select("id, name, country_code, latitude, longitude"),
-    supabase.from("places").select("id, name, category, trip_city_id, visited_on").eq("trip_id", tripId).order("visited_on"),
+    supabase.from("places").select("id, name, category, trip_city_id, latitude, longitude, visited_on, notes").eq("trip_id", tripId).order("visited_on"),
     supabase.from("photos").select("id").eq("trip_id", tripId),
   ]);
 
@@ -179,6 +179,7 @@ export async function getTripDetails(tripId: string): Promise<TripDetails | null
     notes: trip.notes,
     cities: selectedCities.map((city) => ({
       id: city.id,
+      tripCityId: tripCities?.find((tripCity) => tripCity.city_id === city.id)?.id ?? "",
       name: city.name,
       countryCode: city.country_code,
       latitude: city.latitude,
@@ -186,10 +187,14 @@ export async function getTripDetails(tripId: string): Promise<TripDetails | null
     })),
     places: (places ?? []).map((place) => ({
       id: place.id,
+      tripCityId: place.trip_city_id,
       name: place.name,
       category: place.category,
       cityName: cityByTripCityId.get(place.trip_city_id)?.name ?? "Unknown city",
+      latitude: place.latitude,
+      longitude: place.longitude,
       visitedOn: place.visited_on,
+      notes: place.notes,
     })),
     photoCount: photos?.length ?? 0,
   };

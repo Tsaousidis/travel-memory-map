@@ -41,7 +41,7 @@ export type TripDetails = {
   endDate: string;
   description: string;
   notes: string;
-  cities: Array<{ id: string; name: string; countryCode: string; latitude: number; longitude: number }>;
-  places: Array<{ id: string; name: string; category: string; cityName: string; visitedOn: string | null }>;
+  cities: Array<{ id: string; tripCityId: string; name: string; countryCode: string; latitude: number; longitude: number }>;
+  places: Array<{ id: string; tripCityId: string; name: string; category: string; cityName: string; latitude: number; longitude: number; visitedOn: string | null; notes: string }>;
   photoCount: number;
 };

@@ -116,6 +116,16 @@
   .trip-details-list { display: grid; gap: .75rem; margin-top: 1.25rem; }
   .trip-details-list li { display: flex; justify-content: space-between; gap: 1rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); }
   .trip-details-list span { color: var(--muted); font-size: .875rem; text-align: right; }
+  .places-manager { display: grid; gap: 1.5rem; margin-top: 1.25rem; }
+  .place-form { display: grid; gap: 1rem; }
+  .place-management-list { display: grid; gap: .75rem; }
+  .place-management-item { border-top: 1px solid var(--border); padding-top: .75rem; }
+  .place-management-item summary { display: flex; justify-content: space-between; gap: 1rem; cursor: pointer; list-style: none; }
+  .place-management-item summary::-webkit-details-marker { display: none; }
+  .place-management-item summary::before { content: "＋"; color: var(--muted); }
+  .place-management-item details[open] summary::before { content: "−"; }
+  .place-management-item summary span { color: var(--muted); font-size: .875rem; text-align: right; }
+  .place-management-item .place-form { padding: 1rem 0 .25rem; }
   .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
   .city-fields { display: grid; gap: 1rem; margin: 0; padding: 1rem; border: 1px solid var(--border); border-radius: .75rem; }
   .city-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; align-items: end; gap: .75rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }

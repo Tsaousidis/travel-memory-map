@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { getTripDetails } from "@/features/map/server";
+import { PlacesManager } from "@/features/trips/components/places-manager";
 
 export const metadata = { title: "Trip details | Travel Memory Map" };
 
@@ -46,14 +47,10 @@ export default async function TripDetailsPage({ params }: { params: Promise<{ id
             </ul>
           )}
         </Card>
-        <Card>
+        <Card className="places-card">
           <p className="eyebrow mb-4">Places</p>
           <h2>Places remembered</h2>
-          {trip.places.length === 0 ? <p className="mt-4 text-muted">Places will appear here as you add them.</p> : (
-            <ul className="trip-details-list">
-              {trip.places.map((place) => <li key={place.id}><strong>{place.name}</strong><span>{place.cityName} · {place.category}</span></li>)}
-            </ul>
-          )}
+          <PlacesManager tripId={trip.id} cities={trip.cities} places={trip.places} />
         </Card>
       </div>
       <Card>

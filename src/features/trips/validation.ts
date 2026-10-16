@@ -9,7 +9,35 @@ export type TripCityInput = {
   longitude: number;
 };
 
+export type PlaceFormState = {
+  error?: string;
+  fields?: Record<string, string>;
+};
+
+const PLACE_CATEGORIES = ["landmark", "nature", "museum", "food", "neighborhood", "other"] as const;
+
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+export function validatePlaceForm(form: FormData) {
+  const name = String(form.get("name") ?? "").trim();
+  const tripCityId = String(form.get("tripCityId") ?? "").trim();
+  const category = String(form.get("category") ?? "").trim();
+  const latitude = Number(form.get("latitude"));
+  const longitude = Number(form.get("longitude"));
+  const visitedOn = String(form.get("visitedOn") ?? "").trim();
+  const notes = String(form.get("notes") ?? "").trim();
+  const fields: Record<string, string> = {};
+
+  if (!name || name.length > 200) fields.name = "Use between 1 and 200 characters.";
+  if (!tripCityId) fields.tripCityId = "Choose a city.";
+  if (!PLACE_CATEGORIES.includes(category as typeof PLACE_CATEGORIES[number])) fields.category = "Choose a valid category.";
+  if (!Number.isFinite(latitude) || latitude < -90 || latitude > 90) fields.latitude = "Use a latitude between -90 and 90.";
+  if (!Number.isFinite(longitude) || longitude < -180 || longitude > 180) fields.longitude = "Use a longitude between -180 and 180.";
+  if (visitedOn && !ISO_DATE.test(visitedOn)) fields.visitedOn = "Enter a valid date.";
+  if (notes.length > 10000) fields.notes = "Use 10,000 characters or fewer.";
+
+  return { name, tripCityId, category, latitude, longitude, visitedOn, notes, fields, valid: Object.keys(fields).length === 0 };
+}
 
 export function validateTripDetails(form: FormData) {
   const title = String(form.get("title") ?? "").trim();

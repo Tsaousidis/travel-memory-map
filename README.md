@@ -9,7 +9,7 @@ Authentication, owner-based database access, a responsive application shell,
 fictional seed data, the initial interactive MapLibre world map, visited country
 highlighting, trip/city pins, zoom-based city/place exploration, and a Trips
 overview and trip creation are implemented. Trip details, editing/deletion,
-editing/deletion are implemented. Photo galleries, uploads, and Dashboard
+and place management are implemented. Photo galleries, uploads, and Dashboard
 statistics are planned for later steps. Trips can now be edited or deleted
 while reusable cities are preserved. Deployment is
 outside the current scope.
