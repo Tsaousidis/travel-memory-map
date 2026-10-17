@@ -10,8 +10,9 @@ fictional seed data, the initial interactive MapLibre world map, visited country
 highlighting, trip/city pins, zoom-based city/place exploration, and a Trips
 overview and trip creation are implemented. Trip details, editing/deletion,
 and place management are implemented. Trip-specific maps are implemented.
-Photo galleries, uploads, and Dashboard
-statistics are planned for later steps. Trips can now be edited or deleted
+The private `travel-photos` Supabase Storage bucket and owner-scoped Storage
+policies are configured. Photo galleries, uploads, and Dashboard statistics
+are planned for later steps. Trips can now be edited or deleted
 while reusable cities are preserved. Deployment is
 outside the current scope.
 
@@ -34,8 +35,9 @@ history before adopting CLI migration commands.
 
 The optional [seed](supabase/seed.sql) contains five trips, nine cities, and
 fourteen places. Replace its user-ID placeholder in an SQL Editor copy with an
-existing Auth user's UID. Re-running preserves existing records. Photos and
-Storage are not implemented yet.
+existing Auth user's UID. Re-running preserves existing records. The
+`travel-photos` bucket is private; objects must use the
+`user-id/trip-id/filename` path format.
 
 ```sh
 npm run check:supabase

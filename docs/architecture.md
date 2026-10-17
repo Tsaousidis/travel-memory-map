@@ -28,7 +28,8 @@ Authentication routes, a responsive protected application shell, the initial
 MapLibre world map, visited-country layers, trip pins, and zoom-based city/place
 layers are implemented. Trips include creation, a details view, metadata
 editing, deletion, place management, and trip-specific maps; Dashboard data
-views are added in later steps.
+views are added in later steps. The private `travel-photos` Storage bucket is
+owner-scoped through Storage object policies.
 
 ## Responsibilities and dependencies
 
