@@ -3,6 +3,7 @@ import { Card } from "@/components/ui/card";
 import { getTripDetails } from "@/features/map/server";
 import { TripMap } from "@/features/map/components/trip-map";
 import { PlacesManager } from "@/features/trips/components/places-manager";
+import { PhotoUploadForm } from "@/features/trips/components/photo-upload-form";
 
 export const metadata = { title: "Trip details | Travel Memory Map" };
 
@@ -70,6 +71,7 @@ export default async function TripDetailsPage({ params }: { params: Promise<{ id
         <p className="eyebrow mb-4">Photos</p>
         <h2>Photo memories</h2>
         <p className="mt-4 text-muted">{trip.photoCount === 0 ? "Photos will appear here once you upload them." : `${trip.photoCount} photo${trip.photoCount === 1 ? "" : "s"} are attached to this trip.`}</p>
+        <PhotoUploadForm tripId={trip.id} places={trip.places} />
       </Card>
     </section>
   );

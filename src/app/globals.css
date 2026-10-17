@@ -130,6 +130,7 @@
   .place-management-item details[open] summary::before { content: "−"; }
   .place-management-item summary span { color: var(--muted); font-size: .875rem; text-align: right; }
   .place-management-item .place-form { padding: 1rem 0 .25rem; }
+  .photo-upload-form { display: grid; gap: 1rem; margin-top: 1.25rem; max-width: 58rem; }
   .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
   .city-fields { display: grid; gap: 1rem; margin: 0; padding: 1rem; border: 1px solid var(--border); border-radius: .75rem; }
   .city-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; align-items: end; gap: .75rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }

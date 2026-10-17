@@ -14,6 +14,11 @@ export type PlaceFormState = {
   fields?: Record<string, string>;
 };
 
+export type PhotoFormState = {
+  error?: string;
+  fields?: Record<string, string>;
+};
+
 const PLACE_CATEGORIES = ["landmark", "nature", "museum", "food", "neighborhood", "other"] as const;
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;

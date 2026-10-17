@@ -29,7 +29,8 @@ MapLibre world map, visited-country layers, trip pins, and zoom-based city/place
 layers are implemented. Trips include creation, a details view, metadata
 editing, deletion, place management, and trip-specific maps; Dashboard data
 views are added in later steps. The private `travel-photos` Storage bucket is
-owner-scoped through Storage object policies.
+owner-scoped through Storage object policies, and trip details can upload
+photo objects with matching private metadata records.
 
 ## Responsibilities and dependencies
 
