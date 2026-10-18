@@ -43,18 +43,6 @@ const fixtureTripCity = {
   trip_id: fixtureTrip.id,
   city_id: fixtureCity.id,
 };
-const fixturePlace = {
-  id: "00000000-0000-4000-8000-000000000104",
-  user_id: users[0]?.id,
-  trip_id: fixtureTrip.id,
-  trip_city_id: fixtureTripCity.id,
-  name: "Shibuya",
-  category: "neighborhood",
-  latitude: 35.6595,
-  longitude: 139.7005,
-  visited_on: "2025-04-14",
-  notes: "",
-};
 const fixtureCountry = { code: "JP", name: "Japan", continent_code: "AS" };
 
 function session(user, expired = false) {
