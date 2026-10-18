@@ -153,7 +153,7 @@ export async function getTripDetails(tripId: string): Promise<TripDetails | null
     supabase.from("trip_cities").select("id, city_id").eq("trip_id", tripId).order("sort_order"),
     supabase.from("cities").select("id, name, country_code, latitude, longitude"),
     supabase.from("places").select("id, name, category, trip_city_id, latitude, longitude, visited_on, notes").eq("trip_id", tripId).order("visited_on"),
-    supabase.from("photos").select("id").eq("trip_id", tripId),
+    supabase.from("photos").select("id, storage_path, caption, place_id").eq("trip_id", tripId).order("created_at", { ascending: false }),
   ]);
 
   if (tripError || countryError || tripCitiesError || citiesError || placesError || photosError) {
@@ -168,6 +168,14 @@ export async function getTripDetails(tripId: string): Promise<TripDetails | null
     .filter((city) => tripCitiesById.has(city.id))
     .sort((a, b) => (tripCitiesById.get(a.id) ?? 0) - (tripCitiesById.get(b.id) ?? 0));
   const cityByTripCityId = new Map((tripCities ?? []).map((tripCity) => [tripCity.id, citiesById.get(tripCity.city_id)]));
+
+  const photoRows = photos ?? [];
+  const { data: signedPhotos, error: signedPhotosError } = photoRows.length
+    ? await supabase.storage.from("travel-photos").createSignedUrls(photoRows.map((photo) => photo.storage_path), 3600)
+    : { data: [], error: null };
+  if (signedPhotosError) throw new Error("Unable to load trip photos. Please try again.");
+  const placeNames = new Map((places ?? []).map((place) => [place.id, place.name]));
+  const signedUrls = new Map((signedPhotos ?? []).map((photo) => [photo.path, photo.signedUrl]));
 
   return {
     id: trip.id,
@@ -196,6 +204,10 @@ export async function getTripDetails(tripId: string): Promise<TripDetails | null
       visitedOn: place.visited_on,
       notes: place.notes,
     })),
-    photoCount: photos?.length ?? 0,
+    photos: photoRows.flatMap((photo) => {
+      const signedUrl = signedUrls.get(photo.storage_path);
+      return signedUrl ? [{ id: photo.id, signedUrl, caption: photo.caption, placeName: photo.place_id ? placeNames.get(photo.place_id) ?? null : null }] : [];
+    }),
+    photoCount: photoRows.length,
   };
 }

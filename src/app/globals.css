@@ -131,6 +131,19 @@
   .place-management-item summary span { color: var(--muted); font-size: .875rem; text-align: right; }
   .place-management-item .place-form { padding: 1rem 0 .25rem; }
   .photo-upload-form { display: grid; gap: 1rem; margin-top: 1.25rem; max-width: 58rem; }
+  .photo-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); gap: 1rem; margin-top: 1.25rem; }
+  .photo-gallery__item { overflow: hidden; border: 1px solid var(--border); border-radius: .75rem; background: var(--surface); }
+  .photo-gallery__item img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: var(--soft); }
+  .photo-gallery__item figcaption { display: grid; gap: .45rem; padding: .8rem; font-size: .85rem; }
+  .photo-gallery__item figcaption span { color: var(--muted); font-size: .8rem; }
+  .dashboard-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+  .dashboard-stat-card { display: grid; gap: .5rem; }
+  .dashboard-stat-card strong { font-family: var(--font-display); font-size: 2.5rem; font-weight: 400; line-height: 1; }
+  .dashboard-content-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; }
+  .dashboard-list { display: grid; gap: 1rem; margin-top: 1.25rem; }
+  .dashboard-list > div, .dashboard-list > li { display: flex; justify-content: space-between; gap: 1rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); }
+  .dashboard-list dt, .dashboard-list span { color: var(--muted); }
+  .dashboard-list dd, .dashboard-list strong { text-align: right; }
   .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
   .city-fields { display: grid; gap: 1rem; margin: 0; padding: 1rem; border: 1px solid var(--border); border-radius: .75rem; }
   .city-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; align-items: end; gap: .75rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
@@ -154,7 +167,7 @@
     .app-nav-link { justify-content: flex-start; padding-inline: 1rem; gap: 1rem; }
   }
   @media (max-width: 640px) {
-    .form-grid, .city-row, .trip-details-grid { grid-template-columns: 1fr; }
+    .form-grid, .city-row, .trip-details-grid, .dashboard-content-grid { grid-template-columns: 1fr; }
     .city-row { align-items: stretch; }
     .trip-details-heading { display: grid; }
   }

@@ -11,8 +11,9 @@ highlighting, trip/city pins, zoom-based city/place exploration, and a Trips
 overview and trip creation are implemented. Trip details, editing/deletion,
 and place management are implemented. Trip-specific maps are implemented.
 The private `travel-photos` Supabase Storage bucket and owner-scoped Storage
-policies are configured. Photo uploads are implemented; photo galleries and
-Dashboard statistics are planned for later steps. Trips can now be edited or deleted
+policies are configured. Photo uploads and galleries are implemented; signed
+URLs keep the bucket private, and the Dashboard now calculates travel
+statistics from the user's saved data. Trips can now be edited or deleted
 while reusable cities are preserved. Deployment is
 outside the current scope.
 

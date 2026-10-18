@@ -210,3 +210,23 @@ export async function uploadPhoto(_previous: PhotoFormState, form: FormData): Pr
   revalidatePath("/app");
   redirect(`/app/trips/${tripId}`);
 }
+
+export async function deletePhoto(_previous: PhotoFormState, form: FormData): Promise<PhotoFormState> {
+  const tripId = String(form.get("tripId") ?? "").trim();
+  const photoId = String(form.get("photoId") ?? "").trim();
+  if (!tripId || !photoId) return { error: "Unable to delete the photo. Please try again." };
+
+  const { supabase } = await requireUser();
+  const { data: photo, error: readError } = await supabase.from("photos")
+    .select("storage_path").eq("id", photoId).eq("trip_id", tripId).maybeSingle();
+  if (readError || !photo) return { error: "Unable to find the photo. Please try again." };
+
+  const { error: storageError } = await supabase.storage.from(PHOTO_BUCKET).remove([photo.storage_path]);
+  if (storageError) return { error: "Unable to remove the photo file. Please try again." };
+  const { error: deleteError } = await supabase.from("photos").delete().eq("id", photoId).eq("trip_id", tripId);
+  if (deleteError) return { error: "Unable to remove the photo metadata. Please try again." };
+
+  revalidatePath(`/app/trips/${tripId}`);
+  revalidatePath("/app");
+  redirect(`/app/trips/${tripId}`);
+}
