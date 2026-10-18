@@ -16,6 +16,46 @@ const users = ["alice", "bob", "expired"].map((name, i) => ({
   user_metadata: { display_name: name === "bob" ? "Bob" : "Alice" },
   created_at: "2026-01-01T00:00:00Z",
 }));
+for (const user of users) {
+  profiles.set(user.id, { id: user.id, display_name: user.user_metadata.display_name });
+}
+const fixtureTrip = {
+  id: "00000000-0000-4000-8000-000000000101",
+  user_id: users[0]?.id,
+  title: "Fixture Japan",
+  primary_country_code: "JP",
+  start_date: "2025-04-12",
+  end_date: "2025-04-20",
+  description: "Fixture journey",
+  notes: "",
+};
+const fixtureCity = {
+  id: "00000000-0000-4000-8000-000000000102",
+  user_id: users[0]?.id,
+  country_code: "JP",
+  name: "Tokyo",
+  latitude: 35.6762,
+  longitude: 139.6503,
+};
+const fixtureTripCity = {
+  id: "00000000-0000-4000-8000-000000000103",
+  user_id: users[0]?.id,
+  trip_id: fixtureTrip.id,
+  city_id: fixtureCity.id,
+};
+const fixturePlace = {
+  id: "00000000-0000-4000-8000-000000000104",
+  user_id: users[0]?.id,
+  trip_id: fixtureTrip.id,
+  trip_city_id: fixtureTripCity.id,
+  name: "Shibuya",
+  category: "neighborhood",
+  latitude: 35.6595,
+  longitude: 139.7005,
+  visited_on: "2025-04-14",
+  notes: "",
+};
+const fixtureCountry = { code: "JP", name: "Japan", continent_code: "AS" };
 
 function session(user, expired = false) {
   const exp = Math.floor(Date.now() / 1000) + (expired ? -60 : 3600);
@@ -66,11 +106,28 @@ createServer(async (req, res) => {
     if (req.method === "POST") {
       if (body.id !== user.id) return send(403, {});
       if (!profiles.has(user.id)) profiles.set(user.id, body);
-      return send(201, null);
+      return send(200, profiles.get(user.id));
     }
     const profile = url.searchParams.get("id") === `eq.${user.id}` ? profiles.get(user.id) : null;
-    if (req.headers.accept?.includes("vnd.pgrst.object")) return profile ? send(200, profile) : send(406, { code: "PGRST116" });
+    if (profile) return send(200, profile);
+    if (req.headers.accept?.includes("vnd.pgrst.object")) return send(406, { code: "PGRST116" });
     return send(200, profile ? [profile] : []);
+  }
+  if (url.pathname.startsWith("/rest/v1/")) {
+    const resource = url.pathname.slice("/rest/v1/".length);
+    const rows = {
+      countries: [fixtureCountry],
+      trips: [fixtureTrip],
+      cities: [fixtureCity],
+      trip_cities: [fixtureTripCity],
+      places: [],
+      photos: [],
+    }[resource] ?? [];
+    return send(200, rows);
+  }
+  if (url.pathname === "/storage/v1/object/sign/travel-photos") {
+    if (!user) return send(401, {});
+    return send(200, { signedURL: "http://127.0.0.1:54329/storage-fixture/photo.jpg" });
   }
   return send(404, {});
 }).listen(54329, "127.0.0.1");

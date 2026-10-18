@@ -30,7 +30,8 @@ test("shell navigation works on desktop and mobile; account disclosure is keyboa
     await expect(page.getByRole("button", { name: "Sign out", exact: true })).toBeHidden();
   }
   await page.getByLabel("Account menu").click();
-  await page.getByRole("heading", { name: "Your world starts here" }).click();
+  await expect(page.getByRole("paragraph").filter({ hasText: /^Alice$/ })).toBeVisible();
+  await page.keyboard.press("Escape");
   await expect(page.getByRole("button", { name: "Sign out", exact: true })).toBeHidden();
 });
 
