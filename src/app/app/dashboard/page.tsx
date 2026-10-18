@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { getDashboardStats } from "@/features/dashboard/server";
+import { TakeMeSomewhere } from "@/features/dashboard/components/take-me-somewhere";
 
 export const metadata = { title: "Dashboard | Travel Memory Map" };
 
@@ -9,6 +10,7 @@ export default async function DashboardPage() {
     <p className="eyebrow mb-4">A different perspective</p>
     <h1 className="text-4xl sm:text-5xl">Your travel story</h1>
     <p className="mb-10 mt-5 max-w-xl text-muted">The places you have visited, seen together.</p>
+    <TakeMeSomewhere />
     <div className="dashboard-stat-grid">
       <StatCard label="Countries" value={stats.countriesVisited} />
       <StatCard label="Cities" value={stats.citiesVisited} />
