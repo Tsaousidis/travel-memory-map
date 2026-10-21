@@ -10,8 +10,8 @@ test("shell navigation works on desktop and mobile; account disclosure is keyboa
     await page.setViewportSize({ width, height: 900 });
     const nav = page.getByRole("navigation", { name: "Main navigation" });
     for (const [label, path, heading] of [
-      ["Trips", "/app/trips", "Your trips"],
-      ["Dashboard", "/app/dashboard", "Your travel story"],
+      ["Trips", "/app/trips", "Your saved trips"],
+      ["Dashboard", "/app/dashboard", "Your travel footprint"],
       ["Map", "/app", "Welcome, Alice."],
     ]) {
       await nav.getByRole("link", { name: label, exact: true }).click();

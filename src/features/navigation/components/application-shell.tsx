@@ -18,8 +18,11 @@ export function ApplicationShell({ children, name, email }: { children: ReactNod
       </aside>
       <div className="app-workspace">
         <header className="app-header">
-          <span className="eyebrow">Your personal atlas</span>
-          <AccountMenu name={name} email={email} />
+          <div className="app-header__context"><span aria-hidden="true">⌁</span><span className="eyebrow">Your personal atlas</span></div>
+          <div className="app-header__actions">
+            <Link className="button button--primary app-header__cta" href="/app/trips#record-trip">＋ Record a trip</Link>
+            <AccountMenu name={name} email={email} />
+          </div>
         </header>
         <main id="app-content" tabIndex={-1} className="app-content">{children}</main>
       </div>

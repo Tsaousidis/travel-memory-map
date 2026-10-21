@@ -10,10 +10,21 @@ export const metadata = { title: "Trips | Travel Memory Map" };
 export default async function TripsPage() {
   const [trips, countries] = await Promise.all([getTripSummaries(), getCountries()]);
   return <section>
-    <p className="eyebrow mb-4">The journeys behind the pins</p>
-    <h1 className="text-4xl sm:text-5xl">Your trips</h1>
-    <p className="mb-10 mt-5 max-w-xl text-muted">Every journey deserves a place of its own.</p>
-    <Card className="create-trip-card">
+    <div className="page-heading">
+      <div>
+        <p className="eyebrow mb-3">Your journeys</p>
+        <h1>Your saved trips</h1>
+        <p className="mt-3 max-w-xl text-muted">A curated chronicle of the paths you have walked, preserved across seasons and borders.</p>
+      </div>
+      <a className="button button--primary" href="#record-trip">＋ Record a trip</a>
+    </div>
+    <div className="trips-overview-strip">
+      <div><span className="eyebrow">Journeys bound</span><strong>{trips.length}</strong><small>Recorded volumes</small></div>
+      <div><span className="eyebrow">Coordinates saved</span><strong>{trips.reduce((count, trip) => count + trip.placeCount, 0)}</strong><small>Places across your trips</small></div>
+      <div><span className="eyebrow">Days wandered</span><strong>{trips.reduce((count, trip) => count + Math.round((Date.parse(trip.endDate) - Date.parse(trip.startDate)) / 86400000) + 1, 0)}</strong><small>Archived time away</small></div>
+      <div><span className="eyebrow">Film memories</span><strong>{trips.reduce((count, trip) => count + trip.photoCount, 0)}</strong><small>Visual prints preserved</small></div>
+    </div>
+    <Card className="create-trip-card" id="record-trip">
       <p className="eyebrow mb-3">New journey</p>
       <h2 className="mb-6">Record a trip</h2>
       <CreateTripForm countries={countries} />

@@ -7,11 +7,16 @@ export const metadata = { title: "Dashboard | Travel Memory Map" };
 export default async function DashboardPage() {
   const stats = await getDashboardStats();
   return <section>
-    <p className="eyebrow mb-4">A different perspective</p>
-    <h1 className="text-4xl sm:text-5xl">Your travel story</h1>
-    <p className="mb-10 mt-5 max-w-xl text-muted">The places you have visited, seen together.</p>
+    <div className="page-heading">
+      <div>
+        <p className="eyebrow mb-3">Your travel story</p>
+        <h1>Your travel footprint</h1>
+        <p className="mt-3 max-w-xl text-muted">Reflections and statistics drawn from your recorded journeys across the globe.</p>
+      </div>
+    </div>
     <TakeMeSomewhere />
-    <div className="dashboard-stat-grid">
+    <div className="dashboard-section-heading"><h2>Life atlas metrics</h2><span className="eyebrow">Updated automatically</span></div>
+    <div className="dashboard-stat-grid dashboard-stat-grid--editorial">
       <StatCard label="Countries" value={stats.countriesVisited} />
       <StatCard label="Cities" value={stats.citiesVisited} />
       <StatCard label="Trips" value={stats.tripsCount} />
@@ -20,7 +25,7 @@ export default async function DashboardPage() {
       <StatCard label="Continents" value={stats.continentsVisited} />
     </div>
     <div className="dashboard-content-grid">
-      <Card>
+      <Card className="dashboard-editorial-card">
         <p className="eyebrow mb-4">Highlights</p>
         <h2>Your travel patterns</h2>
         <dl className="dashboard-list">
@@ -30,13 +35,13 @@ export default async function DashboardPage() {
           <div><dt>World visited</dt><dd>{stats.percentageOfWorld}%</dd></div>
         </dl>
       </Card>
-      <Card>
+      <Card className="dashboard-editorial-card">
         <p className="eyebrow mb-4">Timeline</p>
         <h2>Trips per year</h2>
         {stats.tripsPerYear.length === 0 ? <p className="mt-4 text-muted">Your trip timeline will appear here.</p> : (
-          <ul className="dashboard-list">
-            {stats.tripsPerYear.map((item) => <li key={item.year}><span>{item.year}</span><strong>{item.count} trip{item.count === 1 ? "" : "s"}</strong></li>)}
-          </ul>
+          <div className="year-chart" aria-label="Trips per year">
+            {stats.tripsPerYear.map((item) => <div className="year-chart__item" key={item.year}><span className="year-chart__bar" style={{ height: `${Math.max(24, item.count * 42)}px` }}><b>{item.count}</b></span><strong>{item.year}</strong><small>{item.count} trip{item.count === 1 ? "" : "s"}</small></div>)}
+          </div>
         )}
       </Card>
     </div>
