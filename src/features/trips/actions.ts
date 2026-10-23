@@ -242,14 +242,17 @@ export async function deletePhoto(_previous: PhotoFormState, form: FormData): Pr
 
 export async function chatWithTripAssistant(
   messages: ChatMessage[],
+  locale: "en" | "el" = "en",
 ): Promise<AiTripAnalysis> {
   const { supabase } = await requireUser();
   const { data: countries } = await supabase.from("countries").select("code, name");
   return analyzeTripConversation({
     messages,
     availableCountries: countries ?? [],
+    locale,
   });
 }
+
 
 export async function saveAiTrip(
   trip: ExtractedTrip,

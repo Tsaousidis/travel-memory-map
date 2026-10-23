@@ -85,9 +85,63 @@
   .app-workspace { min-width: 0; }
   .app-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem clamp(1.25rem, 4vw, 3rem); border-bottom: 1px solid var(--border); background: var(--background); }
   .app-header__context, .app-header__actions { display: flex; align-items: center; gap: .75rem; }
-  .app-header__context > span:first-child { color: var(--muted); font-size: 1.1rem; }
   .app-header__cta { min-height: 2.35rem; padding: .45rem .8rem; font-size: .75rem; }
+  .language-switcher {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  }
+  .lang-flag-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 9px 4px 6px;
+    border: 1px solid transparent;
+    border-radius: 1.5rem;
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    outline-offset: 2px;
+  }
+  .lang-flag-btn:hover {
+    color: var(--foreground);
+    background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  }
+  .lang-flag-btn--active {
+    background: var(--background);
+    color: var(--foreground);
+    border-color: var(--border);
+    box-shadow: 0 1px 4px rgba(36, 61, 53, 0.08);
+  }
+  .lang-flag-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    overflow: hidden;
+    line-height: 0;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+  }
+  .lang-flag-svg {
+    display: block;
+    width: 20px;
+    height: 14px;
+    object-fit: cover;
+  }
+  .lang-code {
+    display: inline-block;
+  }
   .app-content { max-width: 90rem; margin-inline: auto; padding: clamp(1.5rem, 4vw, 3rem); }
+
   .account-menu { position: relative; }
   .account-trigger { display: flex; align-items: center; gap: .6rem; min-height: 2.75rem; cursor: pointer; border-radius: 2rem; font-size: .875rem; list-style: none; }
   .account-trigger::-webkit-details-marker { display: none; }

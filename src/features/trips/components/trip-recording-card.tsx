@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "@/lib/i18n/context";
 import { AiTripChat } from "./ai-trip-chat";
 import { CreateTripForm, type InitialTripValues } from "./create-trip-form";
 import type { ExtractedTrip } from "../ai";
@@ -9,6 +10,7 @@ type Country = { code: string; name: string };
 type RecordMode = "ai" | "manual";
 
 export function TripRecordingCard({ countries }: { countries: Country[] }) {
+  const { t } = useLanguage();
   const [mode, setMode] = useState<RecordMode>("ai");
   const [manualInitialValues, setManualInitialValues] = useState<InitialTripValues | undefined>(undefined);
 
@@ -27,7 +29,7 @@ export function TripRecordingCard({ countries }: { countries: Country[] }) {
   return (
     <div className="trip-recording-container">
       {/* 2 buttons at the top of the box */}
-      <div className="trip-recording-mode-selector" role="tablist" aria-label="Select recording method">
+      <div className="trip-recording-mode-selector" role="tablist" aria-label={t.tripsPage.recordTripHeading}>
         <button
           type="button"
           role="tab"
@@ -38,8 +40,8 @@ export function TripRecordingCard({ countries }: { countries: Country[] }) {
           onClick={() => setMode("ai")}
         >
           <span className="trip-mode-btn__icon" aria-hidden="true">✨</span>
-          <span className="trip-mode-btn__label">Chat with AI</span>
-          <span className="trip-mode-btn__badge">Chatbot</span>
+          <span className="trip-mode-btn__label">{t.tripsPage.tabAiChat}</span>
+          <span className="trip-mode-btn__badge">{t.tripsPage.tabBadgeChatbot}</span>
         </button>
 
         <button
@@ -52,9 +54,10 @@ export function TripRecordingCard({ countries }: { countries: Country[] }) {
           onClick={() => setMode("manual")}
         >
           <span className="trip-mode-btn__icon" aria-hidden="true">📝</span>
-          <span className="trip-mode-btn__label">Manual form</span>
+          <span className="trip-mode-btn__label">{t.tripsPage.tabManualForm}</span>
         </button>
       </div>
+
 
       {/* Mode content */}
       <div className="trip-recording-content">

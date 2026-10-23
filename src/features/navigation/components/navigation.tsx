@@ -2,15 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-const destinations = [
-  { href: "/app", label: "Map", symbol: "◎" },
-  { href: "/app/trips", label: "Trips", symbol: "▤" },
-  { href: "/app/dashboard", label: "Dashboard", symbol: "▥" },
-];
+import { useLanguage } from "@/lib/i18n/context";
 
 export function Navigation() {
   const pathname = usePathname();
+  const { t } = useLanguage();
+
+  const destinations = [
+    { href: "/app", label: t.nav.map, symbol: "◎" },
+    { href: "/app/trips", label: t.nav.trips, symbol: "▤" },
+    { href: "/app/dashboard", label: t.nav.dashboard, symbol: "▥" },
+  ];
+
   return (
     <nav aria-label="Main navigation" className="app-navigation">
       {destinations.map(({ href, label, symbol }) => {
@@ -25,3 +28,4 @@ export function Navigation() {
     </nav>
   );
 }
+

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createTrip } from "@/features/trips/actions";
 import type { TripFormState } from "@/features/trips/validation";
+import { useLanguage } from "@/lib/i18n/context";
 
 type Country = { code: string; name: string };
 type CityRow = { name: string; latitude: string; longitude: string };
@@ -27,6 +28,7 @@ export function CreateTripForm({
   countries: Country[];
   initialValues?: InitialTripValues;
 }) {
+  const { t } = useLanguage();
   const [state, formAction, pending] = useActionState(createTrip, initialState);
   const [title, setTitle] = useState(initialValues?.title ?? "");
   const [countryCode, setCountryCode] = useState(initialValues?.countryCode ?? "");
@@ -48,9 +50,9 @@ export function CreateTripForm({
     <form className="create-trip-form" action={formAction}>
       <div className="form-grid">
         <Input
-          label="Trip title"
+          label={t.tripForm.titleLabel}
           name="title"
-          placeholder="Japan 2025"
+          placeholder={t.tripForm.titlePlaceholder}
           value={title}
           onChange={(event) => setTitle(event.target.value)}
           required
@@ -58,7 +60,7 @@ export function CreateTripForm({
         />
         <div className="field">
           <label htmlFor="countryCode">
-            Primary country <span aria-hidden="true">*</span>
+            {t.tripForm.countryLabel} <span aria-hidden="true">*</span>
           </label>
           <select
             className="input"
@@ -69,7 +71,7 @@ export function CreateTripForm({
             required
             aria-invalid={state.fields?.countryCode ? true : undefined}
           >
-            <option value="" disabled>Select a country</option>
+            <option value="" disabled>{t.tripForm.countrySelectPrompt}</option>
             {countries.map((country) => (
               <option key={country.code} value={country.code}>{country.name}</option>
             ))}
@@ -77,7 +79,7 @@ export function CreateTripForm({
           {state.fields?.countryCode && <p className="field-error">{state.fields.countryCode}</p>}
         </div>
         <Input
-          label="Start date"
+          label={t.tripForm.startDateLabel}
           name="startDate"
           type="date"
           value={startDate}
@@ -86,7 +88,7 @@ export function CreateTripForm({
           error={state.fields?.startDate}
         />
         <Input
-          label="End date"
+          label={t.tripForm.endDateLabel}
           name="endDate"
           type="date"
           value={endDate}
@@ -96,31 +98,31 @@ export function CreateTripForm({
         />
       </div>
       <Input
-        label="Description"
+        label={t.tripForm.descriptionLabel}
         name="description"
-        placeholder="A short description of the journey."
+        placeholder={t.tripForm.descriptionPlaceholder}
         value={description}
         onChange={(event) => setDescription(event.target.value)}
         error={state.fields?.description}
       />
       <fieldset className="city-fields">
-        <legend className="eyebrow">Cities</legend>
-        <p className="field-hint">Add the cities included in this trip and their map coordinates.</p>
+        <legend className="eyebrow">{t.tripForm.citiesHeading}</legend>
+        <p className="field-hint">{t.tripForm.citiesSubheading}</p>
         {cities.map((city, index) => (
           <div className="city-row" key={index}>
             <Input
-              label={`City ${index + 1}`}
+              label={`${t.tripForm.cityName} ${index + 1}`}
               value={city.name}
               onChange={(event) =>
                 setCities((items) =>
                   items.map((item, i) => (i === index ? { ...item, name: event.target.value } : item)),
                 )
               }
-              placeholder="Tokyo"
+              placeholder={t.tripForm.cityNamePlaceholder}
               required
             />
             <Input
-              label="Latitude"
+              label={t.tripForm.latitude}
               value={city.latitude}
               onChange={(event) =>
                 setCities((items) =>
@@ -133,7 +135,7 @@ export function CreateTripForm({
               required
             />
             <Input
-              label="Longitude"
+              label={t.tripForm.longitude}
               value={city.longitude}
               onChange={(event) =>
                 setCities((items) =>
@@ -151,7 +153,7 @@ export function CreateTripForm({
                 variant="ghost"
                 onClick={() => setCities((items) => items.filter((_, i) => i !== index))}
               >
-                Remove
+                {t.tripForm.removeCity}
               </Button>
             )}
           </div>
@@ -162,7 +164,7 @@ export function CreateTripForm({
           variant="secondary"
           onClick={() => setCities((items) => [...items, { name: "", latitude: "", longitude: "" }])}
         >
-          Add another city
+          {t.tripForm.addCity}
         </Button>
       </fieldset>
       <input
@@ -177,7 +179,8 @@ export function CreateTripForm({
         )}
       />
       {state.error && <p className="form-error" role="alert">{state.error}</p>}
-      <Button type="submit" loading={pending}>Create trip</Button>
+      <Button type="submit" loading={pending}>{t.tripForm.saveTrip}</Button>
     </form>
   );
 }
+

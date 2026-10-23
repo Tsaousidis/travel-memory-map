@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { chatWithTripAssistant, saveAiTrip } from "@/features/trips/actions";
 import type { ExtractedTrip } from "@/features/trips/ai";
+import { useLanguage } from "@/lib/i18n/context";
 
 type Country = { code: string; name: string };
 
@@ -16,16 +17,6 @@ type UiChatMessage = {
   trip?: ExtractedTrip;
 };
 
-const DEFAULT_WELCOME: UiChatMessage = {
-  id: "welcome-message",
-  role: "model",
-  content:
-    "Hello! Describe your journey in your own words (e.g., where you went, travel dates, cities visited, and any memorable notes). Gemini AI will analyze the details, verify that everything is complete, and help you save it automatically!",
-};
-
-const EXAMPLE_PHRASE =
-  "I went on vacation to Crete from 05/07/2026 to 15/07/2026, and visited Chania, Heraklion, and Rethymno. Keep a note that the Venetian harbor of Chania was wonderful.";
-
 export function AiTripChat({
   countries,
   onApplyToManual,
@@ -33,7 +24,15 @@ export function AiTripChat({
   countries: Country[];
   onApplyToManual: (trip: ExtractedTrip) => void;
 }) {
-  const [messages, setMessages] = useState<UiChatMessage[]>([DEFAULT_WELCOME]);
+  const { locale, t } = useLanguage();
+
+  const [messages, setMessages] = useState<UiChatMessage[]>([
+    {
+      id: "welcome-message",
+      role: "model",
+      content: t.aiChat.welcomeMessage,
+    },
+  ]);
   const [inputValue, setInputValue] = useState("");
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -65,7 +64,7 @@ export function AiTripChat({
   };
 
   const handleUseExample = () => {
-    setInputValue(EXAMPLE_PHRASE);
+    setInputValue(t.aiChat.examplePhrase);
     if (textareaRef.current) {
       textareaRef.current.focus();
     }
@@ -88,7 +87,6 @@ export function AiTripChat({
     let nextMessages: UiChatMessage[];
 
     if (editingId) {
-      // Find the message being edited and replace it, trimming subsequent bot replies
       const editIndex = messages.findIndex((m) => m.id === editingId);
       if (editIndex !== -1) {
         const updatedMessage: UiChatMessage = {
@@ -114,8 +112,8 @@ export function AiTripChat({
           content: m.content,
         }));
 
-      // Call server action
-      const result = await chatWithTripAssistant(chatPayload);
+      // Call server action with user's selected locale
+      const result = await chatWithTripAssistant(chatPayload, locale);
 
       const botMessage: UiChatMessage = {
         id: `bot-${Date.now()}`,
@@ -148,7 +146,13 @@ export function AiTripChat({
   };
 
   const handleResetChat = () => {
-    setMessages([DEFAULT_WELCOME]);
+    setMessages([
+      {
+        id: "welcome-message",
+        role: "model",
+        content: t.aiChat.welcomeMessage,
+      },
+    ]);
     setInputValue("");
     setEditingMessageId(null);
     setSaveError(null);
@@ -158,23 +162,25 @@ export function AiTripChat({
   const latestCompleteTrip = [...messages].reverse().find((m) => m.trip)?.trip;
 
   return (
-    <div className="ai-trip-chat" aria-label="AI Travel Assistant">
+    <div className="ai-trip-chat" aria-label={t.aiChat.title}>
       <div className="ai-trip-chat__header">
         <div className="ai-trip-chat__header-info">
           <div className="ai-avatar" aria-hidden="true">✨</div>
           <div>
-            <h3 className="ai-trip-chat__title">Gemini Travel Assistant</h3>
-            <p className="ai-trip-chat__subtitle">Record your journey with natural language</p>
+            <h3 className="ai-trip-chat__title">{t.aiChat.title}</h3>
+            <p className="ai-trip-chat__subtitle">{t.aiChat.subtitle}</p>
           </div>
         </div>
         <Button type="button" variant="ghost" onClick={handleResetChat} className="ai-trip-chat__reset-btn">
-          🔄 New conversation
+          {t.aiChat.newConversation}
         </Button>
       </div>
 
       <div className="ai-trip-chat__log" ref={chatScrollRef} role="log" aria-live="polite">
         {messages.map((message) => {
           const isUser = message.role === "user";
+          const displayContent = message.id === "welcome-message" ? t.aiChat.welcomeMessage : message.content;
+
           return (
             <div
               key={message.id}
@@ -184,7 +190,7 @@ export function AiTripChat({
                 {isUser ? "👤" : "✨"}
               </div>
               <div className={`ai-chat-bubble ${isUser ? "ai-chat-bubble--user" : "ai-chat-bubble--bot"}`}>
-                <div className="ai-chat-bubble__text">{message.content}</div>
+                <div className="ai-chat-bubble__text">{displayContent}</div>
 
                 {/* If user message: show Edit button */}
                 {isUser && (
@@ -193,9 +199,9 @@ export function AiTripChat({
                       type="button"
                       className="ai-chat-edit-btn"
                       onClick={() => handleStartEdit(message)}
-                      title="Edit message"
+                      title={t.aiChat.editMessage}
                     >
-                      ✏️ Edit message
+                      {t.aiChat.editMessage}
                     </button>
                   </div>
                 )}
@@ -203,14 +209,14 @@ export function AiTripChat({
                 {/* If bot message and incomplete: show missing info badge and edit encouragement */}
                 {!isUser && message.isComplete === false && message.missingInfo && message.missingInfo.length > 0 && (
                   <div className="ai-missing-info-box">
-                    <p className="ai-missing-info-title">⚠️ Missing required information:</p>
+                    <p className="ai-missing-info-title">{t.aiChat.missingInfoTitle}</p>
                     <ul className="ai-missing-info-list">
                       {message.missingInfo.map((info, idx) => (
                         <li key={idx} className="ai-missing-info-badge">{info}</li>
                       ))}
                     </ul>
                     <p className="ai-missing-info-hint">
-                      💡 Click <strong>«✏️ Edit message»</strong> on your previous message to add the details, or continue the conversation below!
+                      💡 {t.aiChat.missingInfoHint}
                     </p>
                   </div>
                 )}
@@ -221,7 +227,7 @@ export function AiTripChat({
                   return (
                     <div className="ai-trip-preview-card">
                       <div className="ai-trip-preview-header">
-                        <span className="eyebrow">Ready to record</span>
+                        <span className="eyebrow">{t.aiChat.readyToRecord}</span>
                         <h4>{message.trip.title}</h4>
                         <p className="ai-trip-preview-country">
                           📍 <strong>{countryInDb ? countryInDb.name : message.trip.countryName}</strong> ({message.trip.countryCode})
@@ -230,17 +236,17 @@ export function AiTripChat({
 
                       <div className="ai-trip-preview-details">
                         <div className="ai-trip-preview-row">
-                          <span className="ai-trip-preview-label">📅 Dates:</span>
+                          <span className="ai-trip-preview-label">{t.aiChat.dates}</span>
                           <span>
-                            {message.trip.startDate} to {message.trip.endDate}
+                            {message.trip.startDate} {t.aiChat.to} {message.trip.endDate}
                           </span>
                         </div>
 
                         <div className="ai-trip-preview-row">
-                          <span className="ai-trip-preview-label">🏙️ Cities ({message.trip.cities.length}):</span>
+                          <span className="ai-trip-preview-label">{t.aiChat.citiesCount} ({message.trip.cities.length}):</span>
                           <div className="ai-trip-preview-cities">
                             {message.trip.cities.map((city, idx) => (
-                              <span key={idx} className="ai-city-tag" title={`Coordinates: ${city.latitude}, ${city.longitude}`}>
+                              <span key={idx} className="ai-city-tag" title={`${t.aiChat.coordinates}: ${city.latitude}, ${city.longitude}`}>
                                 {city.name} <small>({city.latitude.toFixed(2)}, {city.longitude.toFixed(2)})</small>
                               </span>
                             ))}
@@ -249,7 +255,7 @@ export function AiTripChat({
 
                         {message.trip.description && (
                           <div className="ai-trip-preview-row">
-                            <span className="ai-trip-preview-label">📝 Notes / Description:</span>
+                            <span className="ai-trip-preview-label">{t.aiChat.notesDescription}</span>
                             <p className="ai-trip-preview-desc">{message.trip.description}</p>
                           </div>
                         )}
@@ -262,14 +268,14 @@ export function AiTripChat({
                           loading={isSaving}
                           onClick={() => message.trip && handleSaveTrip(message.trip)}
                         >
-                          🚀 Save trip
+                          {t.aiChat.saveTrip}
                         </Button>
                         <Button
                           type="button"
                           variant="secondary"
                           onClick={() => message.trip && onApplyToManual(message.trip)}
                         >
-                          📝 Edit in manual form
+                          {t.aiChat.editInManual}
                         </Button>
                       </div>
                     </div>
@@ -286,7 +292,7 @@ export function AiTripChat({
             <div className="ai-chat-bubble-avatar" aria-hidden="true">✨</div>
             <div className="ai-chat-bubble ai-chat-bubble--bot ai-chat-bubble--thinking">
               <span className="spinner" aria-hidden="true" />
-              <span>Gemini is analyzing your journey...</span>
+              <span>{t.aiChat.analyzing}</span>
             </div>
           </div>
         )}
@@ -296,7 +302,7 @@ export function AiTripChat({
       {saveError && (
         <div className="ai-chat-error-banner" role="alert">
           <div>
-            <strong>Save error:</strong> {saveError}
+            <strong>{t.aiChat.saveError}</strong> {saveError}
           </div>
           {latestCompleteTrip && (
             <button
@@ -304,7 +310,7 @@ export function AiTripChat({
               className="ai-chat-error-link"
               onClick={() => onApplyToManual(latestCompleteTrip)}
             >
-              Open in manual form to review details.
+              {t.aiChat.openManualReview}
             </button>
           )}
         </div>
@@ -315,9 +321,9 @@ export function AiTripChat({
         {/* If editing a message, show edit banner */}
         {editingMessageId && (
           <div className="ai-chat-edit-indicator">
-            <span>✏️ <strong>Editing message:</strong> Add or modify your trip details</span>
+            <span>✏️ <strong>{t.aiChat.editingBannerTitle}</strong> {t.aiChat.editingBannerDesc}</span>
             <button type="button" onClick={handleCancelEdit} className="ai-chat-cancel-edit-btn">
-              Cancel
+              {t.aiChat.cancelEdit}
             </button>
           </div>
         )}
@@ -326,7 +332,7 @@ export function AiTripChat({
         {messages.length <= 1 && !editingMessageId && !inputValue && (
           <div className="ai-chat-example-bar">
             <button type="button" onClick={handleUseExample} className="ai-chat-example-chip">
-              💡 <span>Try an example:</span> &quot;I went on vacation to Crete from 05/07/2026 to 15/07/2026...&quot;
+              💡 <span>{t.aiChat.exampleLabel}</span> &quot;{t.aiChat.examplePhrase.slice(0, 48)}...&quot;
             </button>
           </div>
         )}
@@ -341,11 +347,11 @@ export function AiTripChat({
             onKeyDown={handleKeyDown}
             placeholder={
               editingMessageId
-                ? "Edit your message (e.g. add dates or cities)..."
-                : "Describe your trip in your own words (Enter to send, Shift+Enter for new line)..."
+                ? t.aiChat.placeholderEditing
+                : t.aiChat.placeholderNormal
             }
             disabled={isPending || isSaving}
-            aria-label="Message to AI assistant"
+            aria-label={t.aiChat.title}
           />
           <div className="ai-trip-chat__form-actions">
             <Button
@@ -354,7 +360,7 @@ export function AiTripChat({
               disabled={!inputValue.trim() || isPending || isSaving}
               loading={isPending}
             >
-              {editingMessageId ? "Update & Check" : "Send"}
+              {editingMessageId ? t.aiChat.updateAndCheck : t.aiChat.send}
             </Button>
           </div>
         </form>
@@ -362,3 +368,4 @@ export function AiTripChat({
     </div>
   );
 }
+
