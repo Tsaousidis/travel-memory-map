@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getOwnProfile, requireUser } from "@/features/auth/server";
+import { analyzeTripConversation, type AiTripAnalysis, type ChatMessage, type ExtractedTrip } from "./ai";
 import { validatePlaceForm, validateTripDetails, validateTripForm, type PhotoFormState, type PlaceFormState, type TripFormState } from "./validation";
 
 const PHOTO_BUCKET = "travel-photos";
@@ -25,7 +26,15 @@ export async function createTrip(_previous: TripFormState, form: FormData): Prom
     description: values.description,
   }).select("id").single();
 
-  if (tripError || !trip) return { error: "Unable to create the trip. Please try again." };
+  if (tripError || !trip) {
+    console.error("Trip creation failed at trips.insert:", tripError);
+    if (tripError?.code === "23503" || tripError?.message?.includes("foreign key") || tripError?.message?.includes("primary_country_code")) {
+      return {
+        error: `Country code "${values.countryCode}" is not recognized. Please choose an available country.`,
+      };
+    }
+    return { error: "Unable to create the trip. Please try again." };
+  }
 
   const createdCityIds: string[] = [];
   const fail = async (message: string): Promise<TripFormState> => {
@@ -229,4 +238,29 @@ export async function deletePhoto(_previous: PhotoFormState, form: FormData): Pr
   revalidatePath(`/app/trips/${tripId}`);
   revalidatePath("/app");
   redirect(`/app/trips/${tripId}`);
+}
+
+export async function chatWithTripAssistant(
+  messages: ChatMessage[],
+): Promise<AiTripAnalysis> {
+  const { supabase } = await requireUser();
+  const { data: countries } = await supabase.from("countries").select("code, name");
+  return analyzeTripConversation({
+    messages,
+    availableCountries: countries ?? [],
+  });
+}
+
+export async function saveAiTrip(
+  trip: ExtractedTrip,
+): Promise<TripFormState> {
+  const form = new FormData();
+  form.set("title", trip.title);
+  form.set("countryCode", trip.countryCode);
+  form.set("startDate", trip.startDate);
+  form.set("endDate", trip.endDate);
+  form.set("description", trip.description);
+  form.set("cities", JSON.stringify(trip.cities));
+
+  return createTrip({}, form);
 }
